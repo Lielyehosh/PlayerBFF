@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayerBFF", "PlayerBFF\PlayerBFF.csproj", "{C33A5838-4736-4D91-A947-A3665C937F38}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BL", "BL", "{D995E5FA-63AA-4249-A6EC-74D69EF8C474}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BFF", "BFF", "{88A081A7-F6C0-453F-8584-8385EA7EDD27}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,8 @@ Global
 		{C33A5838-4736-4D91-A947-A3665C937F38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C33A5838-4736-4D91-A947-A3665C937F38}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C33A5838-4736-4D91-A947-A3665C937F38}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C33A5838-4736-4D91-A947-A3665C937F38} = {88A081A7-F6C0-453F-8584-8385EA7EDD27}
 	EndGlobalSection
 EndGlobal
