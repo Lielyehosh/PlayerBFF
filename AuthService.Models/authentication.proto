@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option csharp_namespace = "AuthMS";
+
+package authentication;
+
+// The authentication service definition.
+service Authentication {
+  // Sends a greeting
+  rpc Login (LoginRequest) returns (LoginResponse);
+}
+
+// The request message containing the user's name.
+message LoginRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings.
+message LoginResponse {
+  string message = 1;
+}

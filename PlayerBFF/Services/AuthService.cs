@@ -4,11 +4,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading;
+using AuthMS;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using PlayerBFF.Interfaces;
-using PlayerBFF.Models;
+using LoginRequest = PlayerBFF.Models.LoginRequest;
+using LoginResponse = PlayerBFF.Models.LoginResponse;
 
 namespace PlayerBFF.Services
 {
@@ -16,13 +18,16 @@ namespace PlayerBFF.Services
     {
         private readonly ILogger<AuthService> _logger;
         private readonly IConfiguration _config;
+        private readonly IAuthMsClient _authMsClient;
 
         public AuthService(
             IConfiguration config, 
-            ILogger<AuthService> logger)
+            ILogger<AuthService> logger, 
+            IAuthMsClient authMsClient)
         {
             _config = config;
             _logger = logger;
+            _authMsClient = authMsClient;
             _logger.LogDebug("AuthService Created");
         }
 
@@ -30,6 +35,10 @@ namespace PlayerBFF.Services
         
         public LoginResponse LoginAsync(LoginRequest request, CancellationToken ct)
         {
+            var res = _authMsClient.GrpcClient.LoginAsync(new AuthMS.LoginRequest()
+            {
+                Name = "Test"
+            }).ResponseAsync.Result;
             var success = AuthenticateUser(request);
             if (!success) return null;
             try
