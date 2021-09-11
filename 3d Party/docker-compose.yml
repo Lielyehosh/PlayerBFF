@@ -1,0 +1,15 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: mongo:3.6
+    ports:
+      - "27017:27017"
+    volumes:
+      - './data:/data/db'
+  rabbitmq:
+    ports:
+      - 5672:5672
+      - 15672:15672
+    image: 'bitnami/rabbitmq:latest'
