@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -17,10 +18,13 @@ namespace PlayerBFF.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly IMongoDal _dal;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger,
+            IMongoDal dal)
         {
             _logger = logger;
+            _dal = dal;
         }
 
         [HttpGet]

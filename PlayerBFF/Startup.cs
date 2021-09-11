@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AuthMS;
 using AuthService.Models;
+using Common;
 using Common.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -57,6 +58,7 @@ namespace PlayerBFF
                 Address = Configuration["AuthMsGrpc:Address"],
                 IgnoreSsl = Convert.ToBoolean(Configuration["AuthMsGrpc:IgnoreSsl"])
             });
+            services.AddMongoDal(Configuration["MongoDBConnectionString"]);
             services.AddControllers();
         }
 
