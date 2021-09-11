@@ -36,12 +36,12 @@ namespace PlayerBFF.Services
         
         public LoginResponse LoginAsync(LoginRequest request, CancellationToken ct)
         {
-            var res = _authMsClient.GrpcClient.LoginAsync(new AuthMS.LoginRequest()
+            var grpcRes = _authMsClient.GrpcClient.AuthUserAsync(new AuthMS.AuthUserRequest()
             {
-                Name = "Test"
+                Username = request.Username,
+                Password = request.Password
             }).ResponseAsync.Result;
-            var success = AuthenticateUser(request);
-            if (!success) return null;
+            if (!grpcRes.Success) return null;
             try
             {
                 return new LoginResponse()
@@ -70,18 +70,6 @@ namespace PlayerBFF.Services
             );
 
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);    
-        }
-
-
-        private bool AuthenticateUser(LoginRequest login)
-        {
-            // TODO - implement a real validation
-            if (login.Username == "Liel")
-            {
-                _logger.LogInformation("User authentication successes");
-                return true;
-            }    
-            return false;
         }
 
     }

@@ -14,13 +14,22 @@ namespace AuthMS.Services
             _logger.LogInformation("Auth GRPC service is up");
         }
 
-        public override async Task<LoginResponse> Login(LoginRequest request, ServerCallContext context)
+        public override async Task<AuthUserResponse> AuthUser(AuthUserRequest request, ServerCallContext context)
         {
-            _logger.LogDebug("Login request via GRPC");
+            _logger.LogDebug("Auth user request via GRPC");
+            // TODO - implement a real validation
             await Task.Delay(1000);
-            return new LoginResponse
+            if (request.Username == "Liel")
             {
-                Message = "Success from liel"
+                _logger.LogInformation("User authentication successes");
+                return new AuthUserResponse()
+                {
+                    Success = true
+                };
+            }
+            return new AuthUserResponse()
+            {
+                Success = false
             };
         }
     }
