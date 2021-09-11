@@ -68,20 +68,18 @@ namespace PlayerBFF.Controllers
 
         private UserModel AuthenticateUser(LoginRequest login)
         {    
-            UserModel user = null;    
     
-            // Validate the User Credentials
             // TODO - move to different service and implement the logic
             if (login.Username == "Liel")    
             {
                 _logger.LogInformation("User authentication successes");
-                user = new UserModel
+                return new UserModel
                 {
                     Username = "Liel Test", 
                     EmailAddress = "test.liel@gmail.com"
                 };    
             }    
-            return user;    
+            return null;    
         }
         
         
