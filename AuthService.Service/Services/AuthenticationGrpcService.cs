@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AuthMS.Services
 {
-    public class AuthenticationGrpcService : Authentication.AuthenticationBase 
+    public class AuthenticationGrpcService : Authentication.AuthenticationBase
     {
         private readonly ILogger<AuthenticationGrpcService> _logger;
 
@@ -16,8 +16,9 @@ namespace AuthMS.Services
 
         public override async Task<LoginResponse> Login(LoginRequest request, ServerCallContext context)
         {
+            _logger.LogDebug("Login request via GRPC");
             await Task.Delay(1000);
-            return new LoginResponse()
+            return new LoginResponse
             {
                 Message = "Success from liel"
             };

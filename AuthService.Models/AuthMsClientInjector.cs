@@ -1,8 +1,9 @@
-﻿using Common;
+﻿using AuthMS;
+using Common;
 using Common.Settings;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AuthMS
+namespace AuthService.Models
 {
     public static class AuthMsClientInjector
     {

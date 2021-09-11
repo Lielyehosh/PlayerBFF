@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AuthMS;
+using AuthService.Models;
 using Common.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -50,7 +51,7 @@ namespace PlayerBFF
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                     };
                 });
-            services.AddSingleton<IAuthService, AuthService>();
+            services.AddSingleton<IAuthService, Services.AuthService>();
             services.AddAuthMsClient(new GrpcClientSettings()
             {
                 Address = Configuration["AuthMsGrpc:Address"],

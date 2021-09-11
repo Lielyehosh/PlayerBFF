@@ -1,4 +1,6 @@
-﻿namespace AuthMS
+﻿using AuthMS;
+
+namespace AuthService.Models
 {
     public interface IAuthMsClient
     {

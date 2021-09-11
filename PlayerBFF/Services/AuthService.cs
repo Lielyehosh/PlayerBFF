@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading;
 using AuthMS;
+using AuthService.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -28,7 +29,7 @@ namespace PlayerBFF.Services
             _config = config;
             _logger = logger;
             _authMsClient = authMsClient;
-            _logger.LogDebug("AuthService Created");
+            _logger.LogDebug("AuthService.Service Created");
         }
 
         private double JwtExpiredMinutes { get; set; } = 120;
@@ -48,9 +49,9 @@ namespace PlayerBFF.Services
                     Token = GenerateJsonWebToken(request)
                 };
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _logger.LogError("Failed to generate JWT token");
+                _logger.LogError(ex, "Failed to generate JWT token");
                 return null;
             }
         }
