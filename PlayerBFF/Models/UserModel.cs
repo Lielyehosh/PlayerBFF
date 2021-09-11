@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PlayerBFF.Controllers
+namespace PlayerBFF.Models
 {
-    internal class UserModel
+    public class UserModel
     {
         public string Username { get; set; }
-        public string PasswordHashed { get; set; }
+        public string HashedPassword { get; set; }
         [EmailAddress]
         public string EmailAddress { get; set; }
     }

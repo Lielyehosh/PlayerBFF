@@ -13,6 +13,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using PlayerBFF.Interfaces;
+using PlayerBFF.Services;
 
 namespace PlayerBFF
 {
@@ -46,6 +48,7 @@ namespace PlayerBFF
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                     };
                 });
+            services.AddSingleton<IAuthService, AuthService>();
             services.AddControllers();
         }
 

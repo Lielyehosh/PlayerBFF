@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using PlayerBFF.Interfaces;
+using PlayerBFF.Models;
 
 namespace PlayerBFF.Controllers
 {
@@ -18,15 +20,20 @@ namespace PlayerBFF.Controllers
     {
         private readonly ILogger<AuthController> _logger;
         private readonly IConfiguration _config;
-        
+        private readonly IAuthService _authService;
+
         // TODO - move out to external configuration
         private double JwtExpiredMinutes { get; set; } = 120;
 
         // LOGIN
-        public AuthController(ILogger<AuthController> logger, IConfiguration config)
+        public AuthController(
+            ILogger<AuthController> logger, 
+            IConfiguration config,
+            IAuthService authService)
         {
             _logger = logger;
             _config = config;
+            _authService = authService;
         }
         
     
@@ -36,52 +43,14 @@ namespace PlayerBFF.Controllers
         {
             if (loginReq == null)
                 return BadRequest("invalid request body");
+
+            var response = _authService.LoginAsync(loginReq, ct);
+            if (response == null)
+                return Unauthorized();
             
-            var user = AuthenticateUser(loginReq);
+            return Ok(response);
 
-            if (user == null) return Unauthorized();
-            
-            var tokenString = GenerateJsonWebToken(loginReq);    
-            return Ok(new LoginResponse()
-            {
-                Token = tokenString
-            });
-
-        }    
-    
-        private string GenerateJsonWebToken(LoginRequest loginReq)    
-        {    
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));    
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            var tokenOptions = new JwtSecurityToken(
-                    issuer: _config["Jwt:Issuer"],
-                    audience: _config["Jwt:Issuer"],
-                    claims: new List<Claim>(),
-                    expires: DateTime.UtcNow.AddMinutes(JwtExpiredMinutes),
-                    signingCredentials: credentials
-                );
-
-            return new JwtSecurityTokenHandler().WriteToken(tokenOptions);    
         }
 
-
-        private UserModel AuthenticateUser(LoginRequest login)
-        {    
-    
-            // TODO - move to different service and implement the logic
-            if (login.Username == "Liel")    
-            {
-                _logger.LogInformation("User authentication successes");
-                return new UserModel
-                {
-                    Username = "Liel Test", 
-                    EmailAddress = "test.liel@gmail.com"
-                };    
-            }    
-            return null;    
-        }
-        
-        
     }
 }

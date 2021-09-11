@@ -1,4 +1,4 @@
-﻿namespace PlayerBFF.Controllers
+﻿namespace PlayerBFF.Models
 {
     public class LoginResponse
     {
