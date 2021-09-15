@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Net.Http;
-using Common.Settings;
+using Common.Utils.Settings;
 using Grpc.Net.Client;
 
-namespace Common
+namespace Common.Utils
 {
     public static class GrpcCommon
     {

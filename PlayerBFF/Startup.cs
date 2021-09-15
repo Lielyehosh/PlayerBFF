@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using AuthMS;
 using AuthService.Models;
-using Common;
-using Common.Settings;
+using Common.Models;
+using Common.Utils;
+using Common.Utils.Extensions;
+using Common.Utils.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -52,13 +52,14 @@ namespace PlayerBFF
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                     };
                 });
+            services.AddMongoDal<GameDatabase>();
             services.AddSingleton<IAuthService, Services.AuthService>();
             services.AddAuthMsClient(new GrpcClientSettings()
             {
                 Address = Configuration["AuthMsGrpc:Address"],
                 IgnoreSsl = Convert.ToBoolean(Configuration["AuthMsGrpc:IgnoreSsl"])
             });
-            services.AddMongoDal(Configuration["MongoDBConnectionString"]);
+            // services.AddGameDal<GameDatabase>();
             services.AddControllers();
         }
 
@@ -69,7 +70,7 @@ namespace PlayerBFF
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseMongoDb(Configuration["MongoDBConnectionString"]);
             app.UseHttpsRedirection();
 
             app.UseRouting();

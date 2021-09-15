@@ -22,7 +22,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Common\Common.csproj" />
+      <ProjectReference Include="..\..\Common\Utils\Common.Utils.csproj" />
     </ItemGroup>
-
 </Project>

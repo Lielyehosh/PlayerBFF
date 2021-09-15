@@ -1,12 +1,11 @@
 ﻿using AuthMS.Services;
-using Common;
+using Common.Utils.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MongoDB.Driver;
 
 namespace AuthMS
 {
@@ -24,7 +23,6 @@ namespace AuthMS
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpc();
-            services.AddMongoDal(Configuration["MongoDBConnectionString"]);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -32,6 +30,7 @@ namespace AuthMS
         {
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
+            app.UseMongoDb(Configuration["MongoDBConnectionString"]);
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>

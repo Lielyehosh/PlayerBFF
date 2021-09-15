@@ -2,13 +2,21 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
+        <RootNamespace>Common.Utils</RootNamespace>
+        <AssemblyName>Common.Utils</AssemblyName>
+        <PackageId>Common.Utils</PackageId>
+        <Authors>Common.Utils</Authors>
+        <Company>Common.Utils</Company>
+        <Product>Common.Utils</Product>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="Grpc.Net.Client" Version="2.39.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
       <PackageReference Include="MongoDB.Bson" Version="2.13.1" />
       <PackageReference Include="MongoDB.Driver" Version="2.13.1" />
+      <PackageReference Include="Serilog" Version="2.10.0" />
     </ItemGroup>
-
+    
 </Project>

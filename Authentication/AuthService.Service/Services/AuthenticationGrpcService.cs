@@ -1,6 +1,4 @@
 using System.Threading.Tasks;
-using Common;
-using Common.DbModels;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
 
@@ -9,13 +7,10 @@ namespace AuthMS.Services
     public class AuthenticationGrpcService : Authentication.AuthenticationBase
     {
         private readonly ILogger<AuthenticationGrpcService> _logger;
-        private readonly IMongoDal _dal;
 
-        public AuthenticationGrpcService(ILogger<AuthenticationGrpcService> logger,
-            IMongoDal dal)
+        public AuthenticationGrpcService(ILogger<AuthenticationGrpcService> logger)
         {
             _logger = logger;
-            _dal = dal;
             _logger.LogInformation("Auth GRPC service is up");
         }
 

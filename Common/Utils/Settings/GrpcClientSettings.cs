@@ -1,4 +1,4 @@
-﻿namespace Common.Settings
+﻿namespace Common.Utils.Settings
 {
     public class GrpcClientSettings
     {

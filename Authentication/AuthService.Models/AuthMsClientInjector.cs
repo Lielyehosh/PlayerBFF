@@ -1,6 +1,6 @@
 ﻿using AuthMS;
-using Common;
-using Common.Settings;
+using Common.Utils;
+using Common.Utils.Settings;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AuthService.Models
