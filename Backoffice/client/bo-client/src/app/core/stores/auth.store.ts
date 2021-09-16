@@ -24,6 +24,7 @@ export class AuthStore {
     this.authPayloadSubject.subscribe(onAuthChange);
     nbAuthService.onTokenChange()
       .subscribe((token) => {
+        debugger;
         this.setAuthToken(token ? token.getValue() : null, token ? token.getPayload() : null);
       });
   }
@@ -48,10 +49,8 @@ export class AuthStore {
   }
 
   public setAuthToken(token: string | null, payload: JwtPayload) {
-    const tokens = this.authTokenSubject.getValue();
-    this.authTokenSubject.next(tokens);
-    const payloads = this.authPayloadSubject.getValue();
-    this.authPayloadSubject.next(payloads);
+    this.authTokenSubject.next(token);
+    this.authPayloadSubject.next(payload);
     if (token) {
       localStorage.setItem('auth_t', token);
       localStorage.setItem('auth_p', JSON.stringify(payload));
