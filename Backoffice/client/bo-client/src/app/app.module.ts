@@ -50,12 +50,13 @@ import {NbAuthJWTToken, NbAuthModule, NbPasswordAuthStrategy} from "@nebular/aut
             defaultMessages: ['You have been successfully logged in.'],
           },
           register: {
-            endpoint: '/api/auth/register',
+            endpoint: 'register',
             method: 'post'
           },
         }),
       ],
-      forms: {},
+      forms: {
+      },
     }),
     HttpClientModule
   ],

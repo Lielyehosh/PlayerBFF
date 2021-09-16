@@ -6,7 +6,7 @@ namespace BFF.Service.Interfaces
 {
     public interface IAuthService
     {
-        public LoginResponse LoginAsync(LoginRequest request, CancellationToken ct);
-        public RegisterResponse RegisterAsync(RegisterRequest registerReq, CancellationToken ct);
+        public AuthResponse Login(LoginRequest request, CancellationToken ct);
+        public AuthResponse Register(RegisterRequest registerReq, CancellationToken ct);
     }
 }

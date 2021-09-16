@@ -9,7 +9,7 @@ service Authentication {
   // Sends a greeting
   rpc AuthUser (AuthUserRequest) returns (AuthUserResponse);
   // Register new user
-  rpc RegisterUser (RegisterUserRequest) returns (RegisterUserResponse);
+  rpc RegisterUser (RegisterUserRequest) returns (AuthUserResponse);
 }
 
 // The request message containing the user's name.
@@ -18,15 +18,21 @@ message AuthUserRequest {
   string password = 2;
 }
 
+message UserData {
+  string username = 1;
+  string email = 2;
+}
 // The response message containing the greetings.
 message AuthUserResponse {
   bool success = 1;
+  string error = 2;
+  UserData user = 3;
 }
 
 message RegisterUserRequest {
-  string idNumber = 1;
-  string username = 2;
-  string email = 3;
+  string username = 1;
+  string email = 2;
+  string password = 3;
 }
 
 message RegisterUserResponse {

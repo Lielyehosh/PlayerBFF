@@ -5,10 +5,13 @@ import {NbButtonModule, NbSidebarModule} from '@nebular/theme';
 import {NbLayoutModule} from "@nebular/theme";
 import { EmptyLayoutPageComponent } from './layouts/empty-layout-page/empty-layout-page.component';
 import { ModuleWithProviders } from '@angular/core';
+import { HeaderComponent } from './components/header/header.component';
+import {NbAuthModule} from "@nebular/auth";
 
 
 const COMPONENTS = [
-  EmptyLayoutPageComponent
+  EmptyLayoutPageComponent,
+  HeaderComponent
 ];
 
 @NgModule({
@@ -18,9 +21,11 @@ const COMPONENTS = [
     NbLayoutModule,
     NbSidebarModule,
     NbButtonModule,
+    NbAuthModule
   ],
   declarations: [
-    ...COMPONENTS
+    ...COMPONENTS,
+    HeaderComponent
   ],
   exports: [
     CommonModule,

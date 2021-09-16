@@ -23,51 +23,72 @@ namespace AuthMS.Services
             _logger = logger;
             _dal = dal;
         }
-        
-        public async Task<RegisterUserResponse> RegisterNewUserAsync(User user, CancellationToken ct = default)
+
+        public async Task<AuthUserResponse> LoginUserAsync(AuthUserRequest request, CancellationToken ct = default)
+        {
+            _logger.LogDebug("Auth user request via GRPC");
+            var user = await FindUserByEmailAsync(request.Email, ct);
+            // TODO - LY - implement a real validation and hashed the password
+            if (user != null && request.Password == user.HashedPassword)
+            {
+                _logger.LogInformation("User authentication successes");
+                return new AuthUserResponse {Success = true, Error = "", User = new UserData()
+                {
+                    Email = user.EmailAddress,
+                    Username = user.Username
+                }};
+            }
+            return new AuthUserResponse {Success = false};
+        }
+
+        public async Task<AuthUserResponse> RegisterNewUserAsync(User user, CancellationToken ct = default)
         {
             if (user == null)
-                return new RegisterUserResponse {Success = false, Error = "Bad message body"};
+                return new AuthUserResponse {Success = false, Error = "Bad message body"};
             _logger.LogDebug("Register new user {Username}", user.Username);
             
             var numberRegex = new Regex(@"^\d+$");
             // TODO - LY - add more validates to the request body and separate the validations for multiple uses 
             if (string.IsNullOrEmpty(user.Username))
-                return new RegisterUserResponse {Success = false, Error = "User name can't be empty"};
+                return new AuthUserResponse {Success = false, Error = "User name can't be empty"};
             if (string.IsNullOrEmpty(user.IdNumber))
-                return new RegisterUserResponse {Success = false, Error = "ID Number can't be empty"};
+                return new AuthUserResponse {Success = false, Error = "ID Number can't be empty"};
             if (!numberRegex.IsMatch(user.IdNumber))
-                return new RegisterUserResponse {Success = false, Error = "ID Number have to contain only numbers"};
+                return new AuthUserResponse {Success = false, Error = "ID Number have to contain only numbers"};
             
 
             if (await FindUserByIdNumberAsync(user.IdNumber, ct) != null) 
             {
                 _logger.LogDebug("User with the same id number already exist - {IdNumber}", user.IdNumber);
-                return new RegisterUserResponse {Success = false, Error = "User with the same id number already exist"};
+                return new AuthUserResponse {Success = false, Error = "User with the same id number already exist"};
             }
             
             if (await FindUserByEmailAsync(user.EmailAddress, ct) != null) 
             {
                 _logger.LogDebug("User with the same email address already exist - {Email}", user.EmailAddress);
-                return new RegisterUserResponse {Success = false, Error = "User with the same email already exist"};
+                return new AuthUserResponse {Success = false, Error = "User with the same email already exist"};
             }
             
             if (await FindUserByUsernameAsync(user.Username, ct) != null) 
             {
                 _logger.LogDebug("User with the same username already exist - {Username}", user.Username);
-                return new RegisterUserResponse {Success = false, Error = "User with the same username already exist"};
+                return new AuthUserResponse {Success = false, Error = "User with the same username already exist"};
             }
             
             // validate passed
             try
             {
                 await _dal.InsertOneAsync(user, ct);
-                return new RegisterUserResponse() {Success = true, Error = ""};
+                return new AuthUserResponse() {Success = true, Error = "", User = new UserData()
+                {
+                    Email = user.EmailAddress,
+                    Username = user.Username
+                }};
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to insert new document to db");
-                return new RegisterUserResponse() {Success = false, Error = ex.Message};
+                return new AuthUserResponse() {Success = false, Error = ex.Message};
             }
         }
 

@@ -13,7 +13,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using LoginRequest = BFF.Service.Models.LoginRequest;
-using LoginResponse = BFF.Service.Models.LoginResponse;
 
 namespace BFF.Service.Services
 {
@@ -36,51 +35,78 @@ namespace BFF.Service.Services
 
         private double JwtExpiredMinutes { get; set; } = 120;
         
-        public LoginResponse LoginAsync(LoginRequest request, CancellationToken ct)
+        public AuthResponse Login(LoginRequest request, CancellationToken ct)
         {
-            var grpcRes = _authMsClient.GrpcClient.AuthUserAsync(new AuthMS.AuthUserRequest()
+            var grpcRes = _authMsClient.GrpcClient.AuthUserAsync(new AuthUserRequest()
             {
                 Email = request.Email,
                 Password = request.Password
             }, cancellationToken: ct).ResponseAsync.Result;
-            if (!grpcRes.Success) return null;
+            if (!grpcRes.Success) 
+                return new AuthResponse()
+                {
+                    Error = grpcRes.Error,
+                    Success = false,
+                    Token = null
+                };
             try
             {
-                return new LoginResponse()
+                return new AuthResponse()
                 {
-                    Token = GenerateJsonWebToken(request)
+                    Token = GenerateJsonWebToken(grpcRes.User),
+                    Error = "",
+                    Success = true
                 };
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to generate JWT token");
-                return null;
+                return new AuthResponse()
+                {
+                    Token = null,
+                    Error = "Failed to generate token",
+                    Success = false
+                };
             }
         }
 
-        public RegisterResponse RegisterAsync(RegisterRequest registerReq, CancellationToken ct)
+        public AuthResponse Register(RegisterRequest registerReq, CancellationToken ct)
         {
             var grpcRes = _authMsClient.GrpcClient.RegisterUserAsync(new RegisterUserRequest()
             {
                 Email = registerReq.Email,
-                Username = registerReq.Username,
-                IdNumber = registerReq.IdNumber
+                Username = registerReq.FullName,
+                Password = registerReq.Password
             }, cancellationToken: ct).ResponseAsync.Result;
-            if (!grpcRes.Success) return null;
+            if (!grpcRes.Success) 
+                return new AuthResponse()
+                {
+                    Error = grpcRes.Error,
+                    Success = false,
+                    Token = null
+                };
             try
             {
-                return new RegisterResponse()
+                return new AuthResponse()
                 {
+                    Token = GenerateJsonWebToken(grpcRes.User),
+                    Error = "",
+                    Success = true
                 };
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to generate JWT token");
-                return null;
+                return new AuthResponse()
+                {
+                    Token = null,
+                    Error = "Failed to generate token",
+                    Success = false
+                };
             }
         }
 
-        private string GenerateJsonWebToken(LoginRequest loginReq)    
+        private string GenerateJsonWebToken(UserData user)    
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));    
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -88,7 +114,9 @@ namespace BFF.Service.Services
             var tokenOptions = new JwtSecurityToken(
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Issuer"],
-                claims: new List<Claim>(),
+                claims: new []{
+                    new Claim("email", user.Email),
+                    new Claim("username", user.Username),},
                 expires: DateTime.UtcNow.AddMinutes(JwtExpiredMinutes),
                 signingCredentials: credentials
             );

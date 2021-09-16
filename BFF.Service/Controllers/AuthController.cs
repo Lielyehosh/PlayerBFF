@@ -46,7 +46,7 @@ namespace BFF.Service.Controllers
             if (loginReq == null)
                 return BadRequest("invalid request body");
 
-            var response = _authService.LoginAsync(loginReq, ct);
+            var response = _authService.Login(loginReq, ct);
             if (response == null)
                 return Unauthorized();
             
@@ -61,7 +61,7 @@ namespace BFF.Service.Controllers
             if (registerReq == null)
                 return BadRequest("invalid request body");
 
-            var response = _authService.RegisterAsync(registerReq, ct);
+            var response = _authService.Register(registerReq, ct);
             if (response == null)
                 return Unauthorized();
             

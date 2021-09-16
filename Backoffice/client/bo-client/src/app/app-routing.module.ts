@@ -9,6 +9,7 @@ import {
 } from '@nebular/auth';
 import {HomeComponent} from "./home/home.component";
 import {EmptyLayoutPageComponent} from "./theme/layouts/empty-layout-page/empty-layout-page.component";
+import {AuthGuard} from "./core/guards/auth.guard";
 
 const routes: Routes = [
   {
@@ -41,8 +42,13 @@ const routes: Routes = [
       },
     ],
   },
-  {path: '', component: EmptyLayoutPageComponent},
-  {path: '**', redirectTo: ''},
+  {
+    path: 'home',
+    component: HomeComponent,
+    canActivate: [AuthGuard]
+  },
+  {path: '', component: EmptyLayoutPageComponent, canActivate: [AuthGuard]},
+  {path: '**', redirectTo: 'home'},
 ];
 
 @NgModule({
