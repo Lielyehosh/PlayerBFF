@@ -1,8 +1,7 @@
 ﻿using System.Threading;
-using PlayerBFF.Controllers;
-using PlayerBFF.Models;
+using BFF.Service.Models;
 
-namespace PlayerBFF.Interfaces
+namespace BFF.Service.Interfaces
 {
     public interface IAuthService
     {

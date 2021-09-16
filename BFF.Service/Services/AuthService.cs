@@ -4,16 +4,15 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading;
-using AuthMS;
 using AuthService.Models;
+using BFF.Service.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using PlayerBFF.Interfaces;
-using LoginRequest = PlayerBFF.Models.LoginRequest;
-using LoginResponse = PlayerBFF.Models.LoginResponse;
+using LoginRequest = BFF.Service.Models.LoginRequest;
+using LoginResponse = BFF.Service.Models.LoginResponse;
 
-namespace PlayerBFF.Services
+namespace BFF.Service.Services
 {
     public class AuthService : IAuthService
     {

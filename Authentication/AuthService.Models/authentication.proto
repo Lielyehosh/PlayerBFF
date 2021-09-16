@@ -8,6 +8,8 @@ package authentication;
 service Authentication {
   // Sends a greeting
   rpc AuthUser (AuthUserRequest) returns (AuthUserResponse);
+  // Register new user
+  rpc RegisterUser (RegisterUserRequest) returns (RegisterUserResponse);
 }
 
 // The request message containing the user's name.
@@ -19,4 +21,15 @@ message AuthUserRequest {
 // The response message containing the greetings.
 message AuthUserResponse {
   bool success = 1;
+}
+
+message RegisterUserRequest {
+  string idNumber = 1;
+  string username = 2;
+  string email = 3;
+}
+
+message RegisterUserResponse {
+  bool success = 1;
+  string error = 2;
 }

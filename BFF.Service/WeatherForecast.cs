@@ -1,6 +1,6 @@
 using System;
 
-namespace PlayerBFF
+namespace BFF.Service
 {
     public class WeatherForecast
     {

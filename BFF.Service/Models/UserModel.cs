@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace PlayerBFF.Models
+﻿namespace BFF.Service.Models
 {
     public class UserModel
     {

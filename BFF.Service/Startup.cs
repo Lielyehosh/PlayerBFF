@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using AuthService.Models;
+using BFF.Service.Interfaces;
 using Common.Models;
 using Common.Utils;
 using Common.Utils.Extensions;
@@ -10,17 +9,12 @@ using Common.Utils.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using PlayerBFF.Interfaces;
-using PlayerBFF.Services;
 
-namespace PlayerBFF
+namespace BFF.Service
 {
     public class Startup
     {
@@ -54,6 +48,7 @@ namespace PlayerBFF
                 });
             services.AddMongoDal<GameDatabase>();
             services.AddSingleton<IAuthService, Services.AuthService>();
+            // Add GRPC Ms Client
             services.AddAuthMsClient(new GrpcClientSettings()
             {
                 Address = Configuration["AuthMsGrpc:Address"],
