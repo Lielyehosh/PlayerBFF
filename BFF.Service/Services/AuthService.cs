@@ -4,8 +4,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading;
+using AuthMS;
 using AuthService.Models;
+using BFF.Service.Controllers;
 using BFF.Service.Interfaces;
+using BFF.Service.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -39,7 +42,7 @@ namespace BFF.Service.Services
             {
                 Email = request.Email,
                 Password = request.Password
-            }).ResponseAsync.Result;
+            }, cancellationToken: ct).ResponseAsync.Result;
             if (!grpcRes.Success) return null;
             try
             {
@@ -54,7 +57,29 @@ namespace BFF.Service.Services
                 return null;
             }
         }
-        
+
+        public RegisterResponse RegisterAsync(RegisterRequest registerReq, CancellationToken ct)
+        {
+            var grpcRes = _authMsClient.GrpcClient.RegisterUserAsync(new RegisterUserRequest()
+            {
+                Email = registerReq.Email,
+                Username = registerReq.Username,
+                IdNumber = registerReq.IdNumber
+            }, cancellationToken: ct).ResponseAsync.Result;
+            if (!grpcRes.Success) return null;
+            try
+            {
+                return new RegisterResponse()
+                {
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to generate JWT token");
+                return null;
+            }
+        }
+
         private string GenerateJsonWebToken(LoginRequest loginReq)    
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));    

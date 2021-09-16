@@ -4,12 +4,15 @@ using BFF.Service.Interfaces;
 using BFF.Service.Models;
 using Common.Models.DbModels;
 using Common.Utils.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace BFF.Service.Controllers
 {
+    [DisableCors]
     [Route("api/auth")]
     [ApiController]
     public class AuthController : Controller
@@ -37,6 +40,7 @@ namespace BFF.Service.Controllers
     
         [HttpPost]
         [Route("login")]
+        [AllowAnonymous]
         public IActionResult LoginAsync([FromBody] LoginRequest loginReq, CancellationToken ct)
         {
             if (loginReq == null)
@@ -47,8 +51,22 @@ namespace BFF.Service.Controllers
                 return Unauthorized();
             
             return Ok(response);
-
         }
 
+        [HttpPost]
+        [Route("register")]
+        [AllowAnonymous]
+        public IActionResult RegisterAsync([FromBody] RegisterRequest registerReq, CancellationToken ct)
+        {
+            if (registerReq == null)
+                return BadRequest("invalid request body");
+
+            var response = _authService.RegisterAsync(registerReq, ct);
+            if (response == null)
+                return Unauthorized();
+            
+            return Ok(response);
+        }
+        
     }
 }

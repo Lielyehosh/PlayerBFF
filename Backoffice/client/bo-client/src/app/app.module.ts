@@ -10,7 +10,7 @@ import {ThemeModule} from "./theme/theme.module";
 import {HomeComponent} from './home/home.component';
 import {RouterModule} from "@angular/router";
 import {HttpClientModule} from "@angular/common/http";
-import {NbAuthModule, NbPasswordAuthStrategy} from "@nebular/auth";
+import {NbAuthJWTToken, NbAuthModule, NbPasswordAuthStrategy} from "@nebular/auth";
 
 @NgModule({
   declarations: [
@@ -32,7 +32,11 @@ import {NbAuthModule, NbPasswordAuthStrategy} from "@nebular/auth";
       strategies: [
         NbPasswordAuthStrategy.setup({
           name: 'email',
-          baseEndpoint: 'https://localhost:5001/api/auth/',
+          baseEndpoint: '/api/auth/',
+          token: {
+            class: NbAuthJWTToken,
+            key: 'token', // this parameter tells where to look for the token
+          },
           login: {
             alwaysFail: false,
             endpoint: 'login',

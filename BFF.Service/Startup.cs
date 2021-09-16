@@ -54,7 +54,7 @@ namespace BFF.Service
                 Address = Configuration["AuthMsGrpc:Address"],
                 IgnoreSsl = Convert.ToBoolean(Configuration["AuthMsGrpc:IgnoreSsl"])
             });
-            // services.AddGameDal<GameDatabase>();
+            
             services.AddControllers();
         }
 
@@ -69,6 +69,8 @@ namespace BFF.Service
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            // TODO - figure out how it should be deployed 
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             
             app.UseAuthentication();
             app.UseAuthorization();
