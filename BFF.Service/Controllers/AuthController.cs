@@ -19,10 +19,8 @@ namespace BFF.Service.Controllers
         private readonly IAuthService _authService;
         private readonly IMongoDal _dal;
 
-        // TODO - move out to external configuration
         private double JwtExpiredMinutes { get; set; } = 120;
 
-        // LOGIN
         public AuthController(
             ILogger<AuthController> logger, 
             IConfiguration config,
@@ -33,21 +31,7 @@ namespace BFF.Service.Controllers
             _config = config;
             _authService = authService;
             _dal = dal;
-        }
-
-        [HttpGet]
-        public IActionResult Test(CancellationToken ct)
-        {
-            var coll = _dal.GetCollection<User>();
-            coll.InsertOne(new User()
-            {
-                Username = "John",
-                EmailAddress = "John@aa.com",
-                ModifyAt = DateTime.UtcNow,
-                CreateAt = DateTime.UtcNow,
-                IdNumber = "333222111"
-            }, cancellationToken: ct);
-            return Ok();
+            JwtExpiredMinutes = Convert.ToDouble(config["Jwt:ExpireTime"]);
         }
         
     

@@ -40,11 +40,22 @@ namespace AuthMS.Services
                 return new RegisterUserResponse {Success = false, Error = "ID Number have to contain only numbers"};
             
 
-            var existingUser = await FindUserByIdNumberAsync(user.IdNumber, ct);
-            if (existingUser != null) 
+            if (await FindUserByIdNumberAsync(user.IdNumber, ct) != null) 
             {
-                _logger.LogDebug("User with the same id number already exist - {IdNumber}", existingUser.IdNumber);
+                _logger.LogDebug("User with the same id number already exist - {IdNumber}", user.IdNumber);
                 return new RegisterUserResponse {Success = false, Error = "User with the same id number already exist"};
+            }
+            
+            if (await FindUserByEmailAsync(user.EmailAddress, ct) != null) 
+            {
+                _logger.LogDebug("User with the same email address already exist - {Email}", user.EmailAddress);
+                return new RegisterUserResponse {Success = false, Error = "User with the same email already exist"};
+            }
+            
+            if (await FindUserByUsernameAsync(user.Username, ct) != null) 
+            {
+                _logger.LogDebug("User with the same username already exist - {Username}", user.Username);
+                return new RegisterUserResponse {Success = false, Error = "User with the same username already exist"};
             }
             
             // validate passed
@@ -67,9 +78,18 @@ namespace AuthMS.Services
             return users.Count > 0 ? users.FirstOrDefault() : null;
         }
 
-        public bool TestM()
+        public async Task<User> FindUserByEmailAsync(string email, CancellationToken ct = default)
         {
-            return true;
+            var userColl = _dal.GetCollection<User>();
+            var users = await userColl.Find(u => u.EmailAddress == email).ToListAsync(cancellationToken: ct);
+            return users.Count > 0 ? users.FirstOrDefault() : null;
+        }
+
+        public async Task<User> FindUserByUsernameAsync(string username, CancellationToken ct = default)
+        {
+            var userColl = _dal.GetCollection<User>();
+            var users = await userColl.Find(u => u.Username == username).ToListAsync(cancellationToken: ct);
+            return users.Count > 0 ? users.FirstOrDefault() : null;
         }
     }
 }

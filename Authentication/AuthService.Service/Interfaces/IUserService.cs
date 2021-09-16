@@ -8,6 +8,7 @@ namespace AuthMS.Services
     {
         public Task<RegisterUserResponse> RegisterNewUserAsync(User user, CancellationToken ct = default);
         public Task<User> FindUserByIdNumberAsync(string idNumber, CancellationToken ct = default);
-        bool TestM();
+        public Task<User> FindUserByEmailAsync(string email, CancellationToken ct = default);
+        public Task<User> FindUserByUsernameAsync(string username, CancellationToken ct = default);
     }
 }

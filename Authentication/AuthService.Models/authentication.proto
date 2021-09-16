@@ -14,7 +14,7 @@ service Authentication {
 
 // The request message containing the user's name.
 message AuthUserRequest {
-  string username = 1;
+  string email = 1;
   string password = 2;
 }
 

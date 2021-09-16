@@ -37,7 +37,7 @@ namespace BFF.Service.Services
         {
             var grpcRes = _authMsClient.GrpcClient.AuthUserAsync(new AuthMS.AuthUserRequest()
             {
-                Username = request.Username,
+                Email = request.Email,
                 Password = request.Password
             }).ResponseAsync.Result;
             if (!grpcRes.Success) return null;
