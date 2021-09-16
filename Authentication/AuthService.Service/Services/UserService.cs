@@ -24,7 +24,7 @@ namespace AuthMS.Services
             _dal = dal;
         }
         
-        public async Task<RegisterUserResponse> RegisterNewUserAsync(User user, CancellationToken ct)
+        public async Task<RegisterUserResponse> RegisterNewUserAsync(User user, CancellationToken ct = default)
         {
             if (user == null)
                 return new RegisterUserResponse {Success = false, Error = "Bad message body"};
@@ -38,6 +38,7 @@ namespace AuthMS.Services
                 return new RegisterUserResponse {Success = false, Error = "ID Number can't be empty"};
             if (!numberRegex.IsMatch(user.IdNumber))
                 return new RegisterUserResponse {Success = false, Error = "ID Number have to contain only numbers"};
+            
 
             var existingUser = await FindUserByIdNumberAsync(user.IdNumber, ct);
             if (existingUser != null) 
@@ -59,7 +60,7 @@ namespace AuthMS.Services
             }
         }
 
-        public async Task<User> FindUserByIdNumberAsync(string idNumber, CancellationToken ct)
+        public async Task<User> FindUserByIdNumberAsync(string idNumber, CancellationToken ct = default)
         {
             var userColl = _dal.GetCollection<User>();
             var users = await userColl.Find(u => u.IdNumber == idNumber).ToListAsync(cancellationToken: ct);

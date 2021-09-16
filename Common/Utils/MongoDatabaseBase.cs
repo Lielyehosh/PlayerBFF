@@ -28,7 +28,7 @@ namespace Common.Utils
         /// <summary>
         /// Mapping between the collection type and the collection details
         /// </summary>
-        protected readonly Dictionary<Type, ICollectionDetails> _collectionDetailsTypeMap = new Dictionary<Type, ICollectionDetails>();
+        protected readonly Dictionary<Type, ICollectionDetails> CollectionDetailsTypeMap = new Dictionary<Type, ICollectionDetails>();
 
         public MongoDatabaseBase()
         {
@@ -43,7 +43,7 @@ namespace Common.Utils
         private ICollectionDetails GetCollectionDetails<T>()
         {
             var dbType = typeof(T);
-            if (!_collectionDetailsTypeMap.TryGetValue(dbType, out var collDetails))
+            if (!CollectionDetailsTypeMap.TryGetValue(dbType, out var collDetails))
                 throw new InvalidOperationException($"Not support type {dbType.Name}");
             return collDetails;
         }
@@ -54,10 +54,10 @@ namespace Common.Utils
         /// <param name="collDetails"></param>
         protected void AddCollectionDetails(ICollectionDetails collDetails)
         {
-            if (_collectionDetailsTypeMap.ContainsKey(collDetails.ModelType))
+            if (CollectionDetailsTypeMap.ContainsKey(collDetails.ModelType))
                 throw new InvalidOperationException($"Type {collDetails.ModelType} was already registered");
 
-            _collectionDetailsTypeMap[collDetails.ModelType] = collDetails;
+            CollectionDetailsTypeMap[collDetails.ModelType] = collDetails;
         }
         
         /// <summary>
@@ -84,7 +84,7 @@ namespace Common.Utils
             
             
             // Create collections with specific options if required
-            foreach (var collection in _collectionDetailsTypeMap.Values.Where(v => v.Options != null))
+            foreach (var collection in CollectionDetailsTypeMap.Values.Where(v => v.Options != null))
             {
                 try
                 {

@@ -11,17 +11,17 @@ namespace Common.Utils
     public class TestDb<TDatabase>
         where TDatabase: MongoDatabaseBase, new()
     {
-        private TDatabase instance;
-        private static bool isFirst = true;
+        private TDatabase _instance;
+        private static bool _isFirst = true;
         private readonly ILogger<TestDb<MongoDatabaseBase>> _logger;
 
         public TestDb()
         {
-            instance = new TDatabase();
+            _instance = new TDatabase();
             _logger = TestsCommon.Logger<TestDb<MongoDatabaseBase>>();
         }
 
-        public TDatabase Database => instance;
+        public TDatabase Database => _instance;
         
         public async Task ConnectAsync(string connectionString, string dbName = "test")
         {
@@ -33,8 +33,8 @@ namespace Common.Utils
             };
             var client = new MongoClient(settings.ConnectionSettings);
             _logger.LogDebug("Clear {DbName}  db", dbName);
-            var dropDb = isFirst;
-            isFirst = false;
+            var dropDb = _isFirst;
+            _isFirst = false;
             if (dropDb)
             {
                 await client.DropDatabaseAsync(settings.DatabaseName);
@@ -43,10 +43,10 @@ namespace Common.Utils
             {
                 var db = client.GetDatabase(dbName);
                 var collections = await (await db.ListCollectionsAsync()).ToListAsync();
-                var BATCH_SIZE = 20;
-                for (var i = 0; i < Math.Ceiling((double)collections.Count / BATCH_SIZE); i++)
+                var batchSize = 20;
+                for (var i = 0; i < Math.Ceiling((double)collections.Count / batchSize); i++)
                 {
-                    var batch = collections.Skip(i * BATCH_SIZE).Take(BATCH_SIZE);
+                    var batch = collections.Skip(i * batchSize).Take(batchSize);
                     await Task.WhenAll(batch.Select(async (coll) =>
                     {
                         var collName = coll["name"].ToString();
@@ -57,7 +57,7 @@ namespace Common.Utils
             }
 
             _logger.LogDebug("Done Clear  {DbName} db", dbName);
-            var connected = await instance.InitializeAsync(new DatabaseInitializeOptions
+            var connected = await _instance.InitializeAsync(new DatabaseInitializeOptions
             {
                 DatabaseName = dbName, 
                 ConnectionSettings = MongoClientSettings.FromUrl(mongoUrl)
