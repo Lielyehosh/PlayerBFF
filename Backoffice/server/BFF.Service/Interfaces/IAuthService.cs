@@ -15,8 +15,8 @@ namespace BFF.Service.Interfaces
         /// <summary>
         /// Reset password request 
         /// </summary>
-        /// <param name="body"></param>
         /// <param name="ct"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
         public Task<ResetPasswordResponse> ResetPasswordAsync(string userId, string pw, CancellationToken ct);
     }

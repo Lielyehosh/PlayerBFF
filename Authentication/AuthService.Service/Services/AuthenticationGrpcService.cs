@@ -37,9 +37,14 @@ namespace AuthMS.Services
             {
                 Username = request?.Username,
                 HashedPassword = request?.Password,
-                EmailAddress = request?.Email.ToLower()
+                EmailAddress = request?.Email.ToLower(),
             }, context.CancellationToken);
         }
 
+        public override Task<AuthUserResponse> ResetPw(ResetPwRequest request, ServerCallContext context)
+        {
+            _logger.LogDebug("Receive Reset pw request via GRPC");
+            return _userService.ResetPwAsync(request.UserId, request.Password, context.CancellationToken);
+        }
     }
 }

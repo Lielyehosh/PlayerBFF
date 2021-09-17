@@ -4,13 +4,21 @@ import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {NbThemeModule, NbLayoutModule, NbSidebarModule, NbButtonModule, NbMenuService, NbMenuModule} from '@nebular/theme';
+import {
+  NbThemeModule,
+  NbLayoutModule,
+  NbSidebarModule,
+  NbButtonModule,
+  NbMenuService,
+  NbMenuModule
+} from '@nebular/theme';
 import {NbEvaIconsModule} from '@nebular/eva-icons';
 import {ThemeModule} from "./theme/theme.module";
 import {HomeComponent} from './pages/home/home.component';
 import {RouterModule} from "@angular/router";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {NbAuthJWTToken, NbAuthModule, NbPasswordAuthStrategy} from "@nebular/auth";
+import {AuthInterceptor} from "./core/interceptors/auth.interceptor";
 
 @NgModule({
   declarations: [
@@ -53,15 +61,21 @@ import {NbAuthJWTToken, NbAuthModule, NbPasswordAuthStrategy} from "@nebular/aut
             endpoint: 'register',
             method: 'post'
           },
+          resetPass: {
+            endpoint: 'reset-pass',
+            method: 'post'
+          }
         }),
       ],
-      forms: {
-      },
+      forms: {},
     }),
     HttpClientModule,
     NbMenuModule.forRoot()
   ],
-  providers: [NbMenuService],
+  providers: [
+    NbMenuService,
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -94,6 +94,46 @@ namespace AuthMS.Services
             }
         }
 
+        public async Task<AuthUserResponse> ResetPwAsync(string userId, string pw, CancellationToken ct)
+        {
+            var userColl = _dal.GetCollection<User>();
+            
+            var user = await userColl.FindOneAndUpdateAsync(u => u.Id == userId,
+                Builders<User>.Update
+                    .Set(u => u.HashedPassword, pw), cancellationToken: ct);
+            if (user == null)
+            {
+                _logger.LogError("User not found id - {UserId}", userId);
+                return new AuthUserResponse()
+                {
+                    Error = "user not found",
+                    Success = false,
+                    User = null
+                };
+            }
+
+            return new AuthUserResponse()
+            {
+                Error = "",
+                Success = true,
+                User = new UserData()
+                {
+                    Email = user.EmailAddress,
+                    Username = user.Username,
+                    Id = user.Id
+                }
+            };
+
+        }
+
+
+        public async Task<User> FindUserByIdAsync(string userId, CancellationToken ct = default)
+        {
+            var userColl = _dal.GetCollection<User>();
+            var users = await userColl.Find(u => u.Id == userId).ToListAsync(cancellationToken: ct);
+            return users.Count > 0 ? users.FirstOrDefault() : null;
+        }
+        
         public async Task<User> FindUserByIdNumberAsync(string idNumber, CancellationToken ct = default)
         {
             var userColl = _dal.GetCollection<User>();

@@ -17,6 +17,7 @@ namespace BFF.Service.Controllers
     [DisableCors]
     [Route("api/auth")]
     [ApiController]
+    [Authorize]
     public class AuthController : Controller
     {
         private readonly ILogger<AuthController> _logger;
