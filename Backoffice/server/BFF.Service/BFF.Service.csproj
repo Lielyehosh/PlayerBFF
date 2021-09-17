@@ -12,9 +12,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Authentication\AuthService.Models\AuthService.Models.csproj" />
-      <ProjectReference Include="..\Common\Models\Common.Models.csproj" />
-      <ProjectReference Include="..\Common\Utils\Common.Utils.csproj" />
+      <ProjectReference Include="..\..\..\Authentication\AuthService.Models\AuthService.Models.csproj" />
+      <ProjectReference Include="..\..\..\Common\Models\Common.Models.csproj" />
+      <ProjectReference Include="..\..\..\Common\Utils\Common.Utils.csproj" />
     </ItemGroup>
 
 
