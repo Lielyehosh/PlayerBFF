@@ -10,6 +10,8 @@ service Authentication {
   rpc AuthLoginUser (AuthLoginUserRequest) returns (AuthUserResponse);
   // Register new user
   rpc AuthRegisterUser (AuthRegisterUserRequest) returns (AuthUserResponse);
+  // Update user profile
+  rpc ResetPw (ResetPwRequest) returns (AuthUserResponse);
 }
 
 message AuthLoginUserRequest {
@@ -29,7 +31,13 @@ message AuthRegisterUserRequest {
   string password = 3;
 }
 
+message ResetPwRequest {
+  string userId = 1;
+  string password = 2;
+}
+
 message UserData {
   string username = 1;
   string email = 2;
+  string id = 3;
 }

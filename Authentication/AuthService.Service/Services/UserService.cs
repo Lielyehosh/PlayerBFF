@@ -29,6 +29,7 @@ namespace AuthMS.Services
         {
             _logger.LogDebug("Auth user request via GRPC");
             var user = await FindUserByEmailAsync(email, ct);
+            
             // TODO - LY - implement a real validation and hashed the password
             if (user != null && password == user.HashedPassword)
             {
@@ -36,7 +37,8 @@ namespace AuthMS.Services
                 return new AuthUserResponse {Success = true, Error = "", User = new UserData()
                 {
                     Email = user.EmailAddress,
-                    Username = user.Username
+                    Username = user.Username,
+                    Id = user.Id
                 }};
             }
             return new AuthUserResponse {Success = false};
@@ -77,11 +79,12 @@ namespace AuthMS.Services
             // validate passed
             try
             {
-                await _dal.InsertOneAsync(user, ct);
+                user = await _dal.InsertOneAsync(user, ct);
                 return new AuthUserResponse() {Success = true, Error = "", User = new UserData()
                 {
                     Email = user.EmailAddress,
-                    Username = user.Username
+                    Username = user.Username,
+                    Id = user.Id
                 }};
             }
             catch (Exception ex)

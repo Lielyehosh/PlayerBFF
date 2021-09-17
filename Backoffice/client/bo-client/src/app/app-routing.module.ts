@@ -44,7 +44,7 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    component: HomeComponent,
+    component: DashboardLayoutComponent,
     canActivate: [AuthGuard]
   },
   {path: '', component: DashboardLayoutComponent, canActivate: [AuthGuard]},

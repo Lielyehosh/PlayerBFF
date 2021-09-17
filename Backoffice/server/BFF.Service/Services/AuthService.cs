@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using AuthMS;
 using AuthService.Models;
 using BFF.Service.Controllers;
@@ -18,6 +19,10 @@ namespace BFF.Service.Services
 {
     public class AuthService : IAuthService
     {
+        public const string IdClaim = "id";
+        public const string EmailClaim = "email";
+        public const string UsernameClaim = "email";
+        
         private readonly ILogger<AuthService> _logger;
         private readonly IConfiguration _config;
         private readonly IAuthMsClient _authMsClient;
@@ -35,13 +40,13 @@ namespace BFF.Service.Services
 
         private double JwtExpiredMinutes { get; set; } = 120;
         
-        public AuthResponse Login(LoginRequest request, CancellationToken ct)
+        public async Task<AuthResponse> LoginAsync(LoginRequest request, CancellationToken ct)
         {
-            var grpcRes = _authMsClient.GrpcClient.AuthLoginUserAsync(new AuthLoginUserRequest()
+            var grpcRes = await _authMsClient.GrpcClient.AuthLoginUserAsync(new AuthLoginUserRequest()
             {
                 Email = request.Email,
                 Password = request.Password
-            }, cancellationToken: ct).ResponseAsync.Result;
+            }, cancellationToken: ct);
             if (!grpcRes.Success) 
                 return new AuthResponse()
                 {
@@ -70,14 +75,14 @@ namespace BFF.Service.Services
             }
         }
 
-        public AuthResponse Register(RegisterRequest registerReq, CancellationToken ct)
+        public async Task<AuthResponse> RegisterAsync(RegisterRequest registerReq, CancellationToken ct)
         {
-            var grpcRes = _authMsClient.GrpcClient.AuthRegisterUserAsync(new AuthRegisterUserRequest()
+            var grpcRes = await _authMsClient.GrpcClient.AuthRegisterUserAsync(new AuthRegisterUserRequest()
             {
                 Email = registerReq.Email,
                 Username = registerReq.FullName,
                 Password = registerReq.Password
-            }, cancellationToken: ct).ResponseAsync.Result;
+            }, cancellationToken: ct);
             if (!grpcRes.Success) 
                 return new AuthResponse()
                 {
@@ -104,6 +109,29 @@ namespace BFF.Service.Services
                     Success = false
                 };
             }
+        }
+
+        public async Task<ResetPasswordResponse> ResetPasswordAsync(string userId, string pw, CancellationToken ct)
+        {
+            var grpcRes = await _authMsClient.GrpcClient.ResetPwAsync(new ResetPwRequest()
+            {
+                Password = pw,
+                UserId = userId
+            });
+            if (!grpcRes.Success)
+            {
+                return new ResetPasswordResponse()
+                {
+                    Success = grpcRes.Success,
+                    Error = grpcRes.Error
+                };
+            }
+
+            return new ResetPasswordResponse()
+            {
+                Error = "",
+                Success = grpcRes.Success
+            };
         }
 
         private string GenerateJsonWebToken(UserData user)    
@@ -114,9 +142,11 @@ namespace BFF.Service.Services
             var tokenOptions = new JwtSecurityToken(
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Issuer"],
-                claims: new []{
-                    new Claim("email", user.Email),
-                    new Claim("username", user.Username),},
+                claims: new [] {
+                    new Claim(EmailClaim, user.Email),
+                    new Claim(UsernameClaim, user.Username),
+                    new Claim(IdClaim, user.Id),
+                },
                 expires: DateTime.UtcNow.AddMinutes(JwtExpiredMinutes),
                 signingCredentials: credentials
             );

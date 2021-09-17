@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   user?: Observable<User>;
   title?: Observable<string>;
   userMenu: NbMenuItem[] = [
-    {title: "Change Password", data: 'changePassword'},
+    {title: "Change Password", data: 'changePassword', link: 'auth/reset-password'},
     {title: "Logout", data: 'logout'}
   ];
 

@@ -11,7 +11,12 @@ namespace Common.Models
             AddCollectionDetails(new CollectionDetails<User>("user")
             {
                 
-            }) ;
+            });
+            
+            AddCollectionDetails(new CollectionDetails<Settings>("settings")
+            {
+                
+            });
         }
     }
 }
