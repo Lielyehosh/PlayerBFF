@@ -13,7 +13,6 @@ namespace AuthMS.Services
     {
         private readonly ILogger<AuthenticationGrpcService> _logger;
         private readonly IUserService _userService;
-        private readonly IMongoDal _dal;
 
         public AuthenticationGrpcService(
             ILogger<AuthenticationGrpcService> logger, 
@@ -26,12 +25,14 @@ namespace AuthMS.Services
 
         public override Task<AuthUserResponse> AuthLoginUser(AuthLoginUserRequest request, ServerCallContext context)
         {
+            _logger.LogDebug("Receive Login request via GRPC");
             return _userService.LoginUserAsync(request.Email, request.Password, context.CancellationToken);
         }
 
         public override Task<AuthUserResponse> AuthRegisterUser(AuthRegisterUserRequest request,
             ServerCallContext context)
         {
+            _logger.LogDebug("Receive Register request via GRPC");
             return _userService.RegisterNewUserAsync(new User()
             {
                 Username = request?.Username,
