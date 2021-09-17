@@ -7,7 +7,6 @@ import {
   NbRegisterComponent,
   NbRequestPasswordComponent, NbResetPasswordComponent
 } from '@nebular/auth';
-import {HomeComponent} from "./pages/home/home.component";
 import {AuthGuard} from "./core/guards/auth.guard";
 import {DashboardLayoutComponent} from "./theme/layouts/dashboard-layout/dashboard-layout.component";
 
@@ -45,7 +44,12 @@ const routes: Routes = [
   {
     path: 'home',
     component: DashboardLayoutComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    children: [{
+      path: '',
+      loadChildren: () => import('./pages/pages.module')
+        .then(m => m.PagesModule),
+    }],
   },
   {path: '', component: DashboardLayoutComponent, canActivate: [AuthGuard]},
   {path: '**', redirectTo: 'home'},

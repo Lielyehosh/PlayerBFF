@@ -8,24 +8,28 @@ import { NbMenuItem } from '@nebular/theme';
 })
 export class SideBarComponent implements OnInit {
   items: NbMenuItem[] = [
-    {
-      title: 'Profile',
-      expanded: true,
-      children: [
-        {
-          title: 'Change Password',
-        },
-        {
-          title: 'Privacy Policy',
-        },
-        {
-          title: 'Logout',
-        },
-      ],
-    },
+    // {
+    //   title: 'Profile',
+    //   expanded: true,
+    //   children: [
+    //     {
+    //       title: 'Change Password',
+    //     },
+    //     {
+    //       title: 'Privacy Policy',
+    //     },
+    //     {
+    //       title: 'Logout',
+    //     },
+    //   ],
+    // },
     {
       title: 'Home',
-      link: '/auth/login'
+      link: '/home'
+    },
+    {
+      title: 'Settings',
+      link: '/home/settings'
     }
   ];
   constructor() { }

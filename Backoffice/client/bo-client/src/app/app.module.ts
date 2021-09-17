@@ -14,7 +14,6 @@ import {
 } from '@nebular/theme';
 import {NbEvaIconsModule} from '@nebular/eva-icons';
 import {ThemeModule} from "./theme/theme.module";
-import {HomeComponent} from './pages/home/home.component';
 import {RouterModule} from "@angular/router";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {NbAuthJWTToken, NbAuthModule, NbPasswordAuthStrategy} from "@nebular/auth";
@@ -23,7 +22,6 @@ import {AuthInterceptor} from "./core/interceptors/auth.interceptor";
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
   ],
   imports: [
     BrowserModule,
