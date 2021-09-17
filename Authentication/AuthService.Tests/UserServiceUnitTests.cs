@@ -18,55 +18,105 @@ namespace AuthService.Tests
     {
         private MongoDalMock _dal;
         private IUserService _userService;
+        private User ExistingUser { get; set; }
 
         [SetUp]
         public async Task Setup()
         {
             _dal = await MongoDalMock.GetMockMongoDalAsync<GameDatabase>();
             _userService = new UserService(TestsCommon.Logger<UserService>(), _dal);
+            // Create a temp user for the tests
+            ExistingUser = new User()
+            {
+                Username = "Test",
+                IdNumber = "123456789",
+                EmailAddress = "test@gmail.com",
+                HashedPassword = "1234",
+            };
+            await _userService.RegisterNewUserAsync(ExistingUser);
         }
-
+        
+        
         [Test]
-        [TestCase("","","", ExpectedResult = false, TestName = "Register new user with empty fields")]
-        [TestCase("","Sharon@gmail.com","", ExpectedResult = false, TestName = "Register new user with only email address")]
-        [TestCase("","Sharon@gmail.com","Sharon", ExpectedResult = false, TestName = "Register new user with only username and email address")]
-        [TestCase("12312312a","Sharon@gmail.com","Sharon", ExpectedResult = false, TestName = "Register new user with invalid id number")]
-        [TestCase("123123123","aaa@gmail.com","Sharon", ExpectedResult = true, TestName = "Register new user with valid id number & email and username")]
-        public async Task<bool> RegisterNewUserTest(string idNumber, string emailAddress, string userName)
+        [TestCase("", TestName = "Empty email address", ExpectedResult = false)]
+        [TestCase("Test@gmail.com", TestName = "Existing email address", ExpectedResult = false)]
+        [TestCase("test@gmail.com", TestName = "Existing email address (lower case)", ExpectedResult = false)]
+        [TestCase("TEST@gmail.com", TestName = "Existing email address (upper case)", ExpectedResult = false)]
+        [TestCase("TEST1@gmail.com", TestName = "Valid email", ExpectedResult = true)]
+        public async Task<bool> RegisterUser_EmailTest(string email)
         {
             var result = await _userService.RegisterNewUserAsync(new User()
             {
-                Username = userName,
-                IdNumber = idNumber,
-                EmailAddress = emailAddress
+                Username = "Test2",
+                IdNumber = "111111111",
+                EmailAddress = email,
+                HashedPassword = "1234"
             });
             return result.Success;
         }
-
+        
         [Test]
-        [TestCase("123123123", "Sharon1@gmail.com", "Sharon1", ExpectedResult = false, TestName = "Register user with existing id number")]
-        [TestCase("123123124", "Sharon1@gmail.com", "Sharon1", ExpectedResult = true, TestName = "Register user with non-existing id number")]
-        [TestCase("123123124", "Sharon@gmail.com", "Sharon1", ExpectedResult = false, TestName = "Register user with existing email address")]
-        [TestCase("123123124", "Sharon1@gmail.com", "Sharon1", ExpectedResult = true, TestName = "Register user with non-existing email address")]
-        [TestCase("123123124", "Sharon1@gmail.com", "Sharon", ExpectedResult = false, TestName = "Register user with existing username")]
-        [TestCase("123123124", "Sharon1@gmail.com", "Sharon1", ExpectedResult = true, TestName = "Register user with non-existing username")]
-        public async Task<bool> RegisterUserWithExistingFieldTest(string idNumber, string emailAddress, string userName)
+        [TestCase("", TestName = "Empty password", ExpectedResult = false)]
+        [TestCase(null, TestName = "NULL password", ExpectedResult = false)]
+        [TestCase("1234", TestName = "Valid password", ExpectedResult = true)]
+        public async Task<bool> RegisterUser_PasswordTest(string password)
         {
-            await _userService.RegisterNewUserAsync(new User()
-            {
-                Username = "Sharon",
-                IdNumber = "123123123",
-                EmailAddress = "Sharon@gmail.com"
-            });
             var result = await _userService.RegisterNewUserAsync(new User()
             {
-                Username = userName,
-                IdNumber = idNumber,
-                EmailAddress = emailAddress
+                Username = "Test2",
+                IdNumber = "111111111",
+                EmailAddress = "Test2@gmail.com",
+                HashedPassword = password
             });
             return result.Success;
         }
-
+        
+        [Test]
+        [TestCase("", TestName = "Empty username", ExpectedResult = false)]
+        [TestCase("Test", TestName = "Existing username", ExpectedResult = false)]
+        [TestCase("test", TestName = "Existing username (lower case)", ExpectedResult = true)]
+        [TestCase("TEST", TestName = "Existing username (upper case)", ExpectedResult = true)]
+        [TestCase("test2", TestName = "Valid username", ExpectedResult = true)]
+        public async Task<bool> RegisterUser_UsernameTest(string username)
+        {
+            var result = await _userService.RegisterNewUserAsync(new User()
+            {
+                Username = username,
+                IdNumber = "111111111",
+                EmailAddress = "Test2@gmail.com",
+                HashedPassword = "1234"
+            });
+            return result.Success;
+        }
+        
+        [Test]
+        [TestCase("", TestName = "Empty id number", ExpectedResult = false)]
+        [TestCase("123456789", TestName = "Existing id number", ExpectedResult = false)]
+        [TestCase("12312312a", TestName = "Invalid id number", ExpectedResult = false)]
+        [TestCase("12n3123125", TestName = "Invalid id number", ExpectedResult = false)]
+        [TestCase("111111111", TestName = "Valid id number", ExpectedResult = true)]
+        public async Task<bool> RegisterUser_IdNumberTest(string idNumber)
+        {
+            var result = await _userService.RegisterNewUserAsync(new User()
+            {
+                Username = "Test2",
+                IdNumber = idNumber,
+                EmailAddress = "Test2@gmail.com",
+                HashedPassword = "1234"
+            });
+            return result.Success;
+        }
+        
+        
+        //
+        //
+        // [Test]
+        // [TestCase("email")]
+        // public async Task<bool> LoginUserTests(string email, string password)
+        // {
+        //     var result = await _userService.LoginUserAsync(email,password);
+        //     return result.Success;
+        // }
 
         [TearDown]
         public async Task Cleanup()

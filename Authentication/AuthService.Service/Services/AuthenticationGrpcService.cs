@@ -24,20 +24,21 @@ namespace AuthMS.Services
             _logger.LogInformation("Auth GRPC service is up");
         }
 
-        public override Task<AuthUserResponse> AuthUser(AuthUserRequest request, ServerCallContext context)
+        public override Task<AuthUserResponse> AuthLoginUser(AuthLoginUserRequest request, ServerCallContext context)
         {
-            return _userService.LoginUserAsync(request, context.CancellationToken);
+            return _userService.LoginUserAsync(request.Email, request.Password, context.CancellationToken);
         }
 
-        public override Task<AuthUserResponse> RegisterUser(RegisterUserRequest request,
+        public override Task<AuthUserResponse> AuthRegisterUser(AuthRegisterUserRequest request,
             ServerCallContext context)
         {
             return _userService.RegisterNewUserAsync(new User()
             {
                 Username = request?.Username,
                 HashedPassword = request?.Password,
-                EmailAddress = request?.Email
+                EmailAddress = request?.Email.ToLower()
             }, context.CancellationToken);
         }
+
     }
 }

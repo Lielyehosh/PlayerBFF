@@ -37,7 +37,7 @@ namespace BFF.Service.Services
         
         public AuthResponse Login(LoginRequest request, CancellationToken ct)
         {
-            var grpcRes = _authMsClient.GrpcClient.AuthUserAsync(new AuthUserRequest()
+            var grpcRes = _authMsClient.GrpcClient.AuthLoginUserAsync(new AuthLoginUserRequest()
             {
                 Email = request.Email,
                 Password = request.Password
@@ -72,7 +72,7 @@ namespace BFF.Service.Services
 
         public AuthResponse Register(RegisterRequest registerReq, CancellationToken ct)
         {
-            var grpcRes = _authMsClient.GrpcClient.RegisterUserAsync(new RegisterUserRequest()
+            var grpcRes = _authMsClient.GrpcClient.AuthRegisterUserAsync(new AuthRegisterUserRequest()
             {
                 Email = registerReq.Email,
                 Username = registerReq.FullName,

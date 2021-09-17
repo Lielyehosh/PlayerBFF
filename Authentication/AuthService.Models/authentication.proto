@@ -7,35 +7,29 @@ package authentication;
 // The authentication service definition.
 service Authentication {
   // Sends a greeting
-  rpc AuthUser (AuthUserRequest) returns (AuthUserResponse);
+  rpc AuthLoginUser (AuthLoginUserRequest) returns (AuthUserResponse);
   // Register new user
-  rpc RegisterUser (RegisterUserRequest) returns (AuthUserResponse);
+  rpc AuthRegisterUser (AuthRegisterUserRequest) returns (AuthUserResponse);
 }
 
-// The request message containing the user's name.
-message AuthUserRequest {
+message AuthLoginUserRequest {
   string email = 1;
   string password = 2;
 }
 
-message UserData {
-  string username = 1;
-  string email = 2;
-}
-// The response message containing the greetings.
 message AuthUserResponse {
   bool success = 1;
   string error = 2;
   UserData user = 3;
 }
 
-message RegisterUserRequest {
+message AuthRegisterUserRequest {
   string username = 1;
   string email = 2;
   string password = 3;
 }
 
-message RegisterUserResponse {
-  bool success = 1;
-  string error = 2;
+message UserData {
+  string username = 1;
+  string email = 2;
 }

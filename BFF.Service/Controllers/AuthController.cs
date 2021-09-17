@@ -47,8 +47,11 @@ namespace BFF.Service.Controllers
                 return BadRequest("invalid request body");
 
             var response = _authService.Login(loginReq, ct);
-            if (response == null)
-                return Unauthorized();
+            if (!response.Success)
+            {
+                _logger.LogDebug("Unauthorized user login request - {Error}", response.Error);
+                return Unauthorized(response.Error);
+            }
             
             return Ok(response);
         }
@@ -62,8 +65,11 @@ namespace BFF.Service.Controllers
                 return BadRequest("invalid request body");
 
             var response = _authService.Register(registerReq, ct);
-            if (response == null)
-                return Unauthorized();
+            if (!response.Success)
+            {
+                _logger.LogDebug("Unauthorized user register request - {Error}", response.Error);
+                return Unauthorized(response.Error);
+            }
             
             return Ok(response);
         }

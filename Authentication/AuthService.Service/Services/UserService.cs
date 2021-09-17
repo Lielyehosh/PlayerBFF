@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using AuthMS.Utils;
 using Common.Models.DbModels;
 using Common.Utils;
 using Microsoft.Extensions.Logging;
@@ -24,12 +25,12 @@ namespace AuthMS.Services
             _dal = dal;
         }
 
-        public async Task<AuthUserResponse> LoginUserAsync(AuthUserRequest request, CancellationToken ct = default)
+        public async Task<AuthUserResponse> LoginUserAsync(string email, string password, CancellationToken ct = default)
         {
             _logger.LogDebug("Auth user request via GRPC");
-            var user = await FindUserByEmailAsync(request.Email, ct);
+            var user = await FindUserByEmailAsync(email, ct);
             // TODO - LY - implement a real validation and hashed the password
-            if (user != null && request.Password == user.HashedPassword)
+            if (user != null && password == user.HashedPassword)
             {
                 _logger.LogInformation("User authentication successes");
                 return new AuthUserResponse {Success = true, Error = "", User = new UserData()
@@ -47,17 +48,15 @@ namespace AuthMS.Services
                 return new AuthUserResponse {Success = false, Error = "Bad message body"};
             _logger.LogDebug("Register new user {Username}", user.Username);
             
-            var numberRegex = new Regex(@"^\d+$");
             // TODO - LY - add more validates to the request body and separate the validations for multiple uses 
-            if (string.IsNullOrEmpty(user.Username))
-                return new AuthUserResponse {Success = false, Error = "User name can't be empty"};
-            if (string.IsNullOrEmpty(user.IdNumber))
-                return new AuthUserResponse {Success = false, Error = "ID Number can't be empty"};
-            if (!numberRegex.IsMatch(user.IdNumber))
-                return new AuthUserResponse {Success = false, Error = "ID Number have to contain only numbers"};
+            if (!Validator.ValidateEmail(user.EmailAddress))
+                return new AuthUserResponse {Success = false, Error = "Invalid email address"};
+            if (!Validator.ValidatePassword(user.HashedPassword))
+                return new AuthUserResponse {Success = false, Error = "Invalid password"};
             
-
-            if (await FindUserByIdNumberAsync(user.IdNumber, ct) != null) 
+            
+            // TODO - its a temporary validate for existing fields, need to implement a better way for this validate
+            if (await FindUserByIdNumberAsync(user.IdNumber, ct) != null)
             {
                 _logger.LogDebug("User with the same id number already exist - {IdNumber}", user.IdNumber);
                 return new AuthUserResponse {Success = false, Error = "User with the same id number already exist"};
@@ -102,7 +101,7 @@ namespace AuthMS.Services
         public async Task<User> FindUserByEmailAsync(string email, CancellationToken ct = default)
         {
             var userColl = _dal.GetCollection<User>();
-            var users = await userColl.Find(u => u.EmailAddress == email).ToListAsync(cancellationToken: ct);
+            var users = await userColl.Find(u => u.EmailAddress == email.ToLower()).ToListAsync(cancellationToken: ct);
             return users.Count > 0 ? users.FirstOrDefault() : null;
         }
 
