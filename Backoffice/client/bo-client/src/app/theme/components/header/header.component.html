@@ -1,3 +1,16 @@
-<div>
-  <span>liels</span>
+<div class="header-container">
+
+</div>
+
+<div class="header-container">
+  <nb-actions size="small">
+    <nb-action class="user-action" *nbIsGranted="['view', 'user']">
+      <nb-user [nbContextMenu]="userMenu"
+               nbContextMenuTag="user-menu"
+               [onlyPicture]="false"
+               [name]="(user | async)?.name ?? ''">
+      </nb-user>
+    </nb-action>
+    <nb-action class="d-none d-lg-block" style="opacity:0.4">{{"1.0.0"}}</nb-action>
+  </nb-actions>
 </div>

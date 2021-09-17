@@ -24,7 +24,6 @@ export class AuthStore {
     this.authPayloadSubject.subscribe(onAuthChange);
     nbAuthService.onTokenChange()
       .subscribe((token) => {
-        debugger;
         this.setAuthToken(token ? token.getValue() : null, token ? token.getPayload() : null);
       });
   }

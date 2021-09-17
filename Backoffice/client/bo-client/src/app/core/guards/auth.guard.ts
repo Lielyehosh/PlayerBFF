@@ -11,6 +11,7 @@ import { NbAuthService } from '@nebular/auth';
 import { NbMenuService } from '@nebular/theme';
 import { Observable } from 'rxjs';
 import {AuthStore} from "../stores/auth.store";
+import {filter} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -18,13 +19,19 @@ import {AuthStore} from "../stores/auth.store";
 export class AuthGuard implements CanActivate {
   constructor(
     private router: Router,
-    private authStore: AuthStore
+    private authStore: AuthStore,
+    private nbMenuService: NbMenuService,
   ) {
+    this.nbMenuService.onItemClick()
+      .pipe(filter((menuBag) => menuBag.item.title === 'Logout'))
+      .subscribe((menuBag) => {
+        this.authStore.setAuthToken(null, {});
+        this.router.navigateByUrl(`/auth`);
+    });
   }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot):
     Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    debugger;
     if (!this.authStore.getAuthToken()) {
       return this.router.parseUrl(`auth/login`);
     }

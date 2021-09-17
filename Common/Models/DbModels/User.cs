@@ -12,5 +12,11 @@ namespace Common.Models.DbModels
         public string Username { get; set; }
         [BsonRepresentation(BsonType.String)]
         public string EmailAddress { get; set; }
+        
+        /// <summary>
+        /// TODO - need to hash the password
+        /// </summary>
+        [BsonRepresentation(BsonType.String)]
+        public string HashedPassword { get; set; }
     }
 }

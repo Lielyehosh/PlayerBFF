@@ -15,6 +15,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   user?: Observable<User>;
   title?: Observable<string>;
+  userMenu: NbMenuItem[] = [
+    {title: "Change Password", data: 'changePassword'},
+    {title: "Logout", data: 'logout'}
+  ];
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService) {

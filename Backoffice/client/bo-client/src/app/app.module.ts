@@ -4,7 +4,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {NbThemeModule, NbLayoutModule, NbSidebarModule, NbButtonModule} from '@nebular/theme';
+import {NbThemeModule, NbLayoutModule, NbSidebarModule, NbButtonModule, NbMenuService, NbMenuModule} from '@nebular/theme';
 import {NbEvaIconsModule} from '@nebular/eva-icons';
 import {ThemeModule} from "./theme/theme.module";
 import {HomeComponent} from './home/home.component';
@@ -58,9 +58,10 @@ import {NbAuthJWTToken, NbAuthModule, NbPasswordAuthStrategy} from "@nebular/aut
       forms: {
       },
     }),
-    HttpClientModule
+    HttpClientModule,
+    NbMenuModule.forRoot()
   ],
-  providers: [],
+  providers: [NbMenuService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
