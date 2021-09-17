@@ -7,9 +7,9 @@ import {
   NbRegisterComponent,
   NbRequestPasswordComponent, NbResetPasswordComponent
 } from '@nebular/auth';
-import {HomeComponent} from "./home/home.component";
-import {EmptyLayoutPageComponent} from "./theme/layouts/empty-layout-page/empty-layout-page.component";
+import {HomeComponent} from "./pages/home/home.component";
 import {AuthGuard} from "./core/guards/auth.guard";
+import {DashboardLayoutComponent} from "./theme/layouts/dashboard-layout/dashboard-layout.component";
 
 const routes: Routes = [
   {
@@ -47,7 +47,7 @@ const routes: Routes = [
     component: HomeComponent,
     canActivate: [AuthGuard]
   },
-  {path: '', component: EmptyLayoutPageComponent, canActivate: [AuthGuard]},
+  {path: '', component: DashboardLayoutComponent, canActivate: [AuthGuard]},
   {path: '**', redirectTo: 'home'},
 ];
 

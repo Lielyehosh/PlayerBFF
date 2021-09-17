@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {RouterModule} from "@angular/router";
 import {
   NbActionsModule,
@@ -10,16 +10,17 @@ import {
   NbUserModule
 } from '@nebular/theme';
 import {NbLayoutModule} from "@nebular/theme";
-import { EmptyLayoutPageComponent } from './layouts/empty-layout-page/empty-layout-page.component';
-import { ModuleWithProviders } from '@angular/core';
-import { HeaderComponent } from './components/header/header.component';
+import {ModuleWithProviders} from '@angular/core';
+import {HeaderComponent} from './components/header/header.component';
 import {NbAuthModule} from "@nebular/auth";
-import { SideBarComponent } from './components/side-bar/side-bar.component';
+import {SideBarComponent} from './components/side-bar/side-bar.component';
+import {DashboardLayoutComponent} from './layouts/dashboard-layout/dashboard-layout.component';
 
 
 const COMPONENTS = [
-  EmptyLayoutPageComponent,
-  HeaderComponent
+  DashboardLayoutComponent,
+  HeaderComponent,
+  SideBarComponent
 ];
 
 @NgModule({
@@ -38,13 +39,10 @@ const COMPONENTS = [
   ],
   declarations: [
     ...COMPONENTS,
-    HeaderComponent,
-    SideBarComponent
   ],
   exports: [
     CommonModule,
     ...COMPONENTS,
-    SideBarComponent
   ]
 })
 export class ThemeModule {

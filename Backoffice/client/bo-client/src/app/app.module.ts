@@ -7,7 +7,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NbThemeModule, NbLayoutModule, NbSidebarModule, NbButtonModule, NbMenuService, NbMenuModule} from '@nebular/theme';
 import {NbEvaIconsModule} from '@nebular/eva-icons';
 import {ThemeModule} from "./theme/theme.module";
-import {HomeComponent} from './home/home.component';
+import {HomeComponent} from './pages/home/home.component';
 import {RouterModule} from "@angular/router";
 import {HttpClientModule} from "@angular/common/http";
 import {NbAuthJWTToken, NbAuthModule, NbPasswordAuthStrategy} from "@nebular/auth";

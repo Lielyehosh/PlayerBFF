@@ -3,7 +3,7 @@ import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Subject} from 'rxjs';
 import {BehaviorSubject} from 'rxjs';
-import {User, UserData} from "../../../core/data/user";
+import {User} from "../../../core/data/user";
 import {NbMenuItem, NbMenuService, NbSidebarService} from "@nebular/theme";
 
 @Component({
