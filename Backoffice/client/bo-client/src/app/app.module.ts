@@ -18,6 +18,7 @@ import {RouterModule} from "@angular/router";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {NbAuthJWTToken, NbAuthModule, NbPasswordAuthStrategy} from "@nebular/auth";
 import {AuthInterceptor} from "./core/interceptors/auth.interceptor";
+import {DynamicFormModule} from "./shared/dynamic-form/dynamic-form.module";
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import {AuthInterceptor} from "./core/interceptors/auth.interceptor";
       forms: {},
     }),
     HttpClientModule,
-    NbMenuModule.forRoot()
+    NbMenuModule.forRoot(),
+    DynamicFormModule
   ],
   providers: [
     NbMenuService,

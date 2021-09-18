@@ -5,7 +5,8 @@ import {PagesRoutingModule, routedComponents} from './pages-routing.module';
 import {SettingsComponent} from './settings/settings.component';
 import {ThemeModule} from '../theme/theme.module';
 import {NbAccordionModule, NbButtonModule, NbCardModule, NbIconModule, NbInputModule, NbListModule} from "@nebular/theme";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {DynamicFormModule} from "../shared/dynamic-form/dynamic-form.module";
 
 
 @NgModule({
@@ -19,7 +20,9 @@ import {FormsModule} from "@angular/forms";
     NbListModule,
     NbInputModule,
     NbCardModule,
-    PagesRoutingModule
+    PagesRoutingModule,
+    ReactiveFormsModule,
+    DynamicFormModule
   ],
   declarations: [...routedComponents, SettingsComponent]
 })

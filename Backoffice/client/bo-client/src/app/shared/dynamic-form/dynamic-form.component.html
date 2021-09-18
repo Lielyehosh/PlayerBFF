@@ -1,0 +1,30 @@
+<ng-form *ngIf="form" [formGroup]="form">
+  <span>Value: {{form.value | json}}</span>
+  <hr>
+  <span>Valid: {{form.valid | json}}</span>
+  <hr>
+  <div *ngFor="let inputField of inputFields; let i=index">
+    <ng-container [ngSwitch]="inputField.type">
+      <ng-container *ngSwitchCase="'text'">
+        <ng-container>
+          <label class="label">{{inputField.label}}</label>
+          <input nbInput
+                 fullWidth
+                 [formControlName]="inputField.name"
+                 [status]="inputField.control.valid ? 'basic':'danger'"
+                 type="text">
+        </ng-container>
+      </ng-container>
+      <ng-container *ngSwitchCase="'checkbox'">
+        <nb-checkbox
+          [status]="inputField.control.valid ? 'basic':'danger'"
+          [formControlName]="inputField.name">
+          {{inputField.label}}
+        </nb-checkbox>
+      </ng-container>
+    </ng-container>
+  </div>
+  <ng-container>
+    <button nbButton (click)="submitBtnClicked($event)" [disabled]="!form.valid">Submit</button>
+  </ng-container>
+</ng-form>
