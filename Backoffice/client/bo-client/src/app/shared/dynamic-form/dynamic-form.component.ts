@@ -1,7 +1,7 @@
 import {Input} from '@angular/core';
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {DynamicInputField,InputFieldType} from "./dynamic-input-field";
+import {DynamicInputField} from "./dynamic-input-field";
 
 @Component({
   selector: 'app-dynamic-form',
@@ -35,7 +35,7 @@ export class DynamicFormComponent implements OnInit {
     this.form.valueChanges.subscribe(console.log);
   }
 
-  submitBtnClicked($event: MouseEvent) {
+  submitBtnClicked() {
     if (this.form?.valid) {
       this.submit.emit(this.form?.value);
     }
