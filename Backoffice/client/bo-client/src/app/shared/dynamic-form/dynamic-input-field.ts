@@ -1,13 +1,13 @@
 import {FormControl} from "@angular/forms";
 
 export enum InputFieldType {
-  TEXT = "text",
-  CHECKBOX = "checkbox",
-  NUMBER = "number"
+  TEXT = 'text',
+  CHECKBOX = 'checkbox',
+  NUMBER = 'number',
+  DATE = 'date',
 }
 
 export interface DynamicInputField {
-  id: string,
   type: InputFieldType,
   label: string,
   control: FormControl,

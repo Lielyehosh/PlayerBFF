@@ -10,7 +10,7 @@ import {
   NbSidebarModule,
   NbButtonModule,
   NbMenuService,
-  NbMenuModule
+  NbMenuModule, NbDatepickerModule
 } from '@nebular/theme';
 import {NbEvaIconsModule} from '@nebular/eva-icons';
 import {ThemeModule} from "./theme/theme.module";
@@ -70,7 +70,8 @@ import {DynamicFormModule} from "./shared/dynamic-form/dynamic-form.module";
     }),
     HttpClientModule,
     NbMenuModule.forRoot(),
-    DynamicFormModule
+    DynamicFormModule,
+    NbDatepickerModule.forRoot(),
   ],
   providers: [
     NbMenuService,

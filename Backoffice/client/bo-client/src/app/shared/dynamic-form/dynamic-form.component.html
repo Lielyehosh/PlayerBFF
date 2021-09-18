@@ -2,14 +2,12 @@
   <div *ngFor="let inputField of inputFields; let i=index">
     <ng-container [ngSwitch]="inputField.type">
       <ng-container *ngSwitchCase="'text'">
-        <ng-container>
           <label class="label">{{inputField.label}}</label>
           <input nbInput
                  fullWidth
                  [formControlName]="inputField.name"
                  [status]="inputField.control.valid ? 'basic':'danger'"
                  type="text">
-        </ng-container>
       </ng-container>
       <ng-container *ngSwitchCase="'checkbox'">
         <nb-checkbox
@@ -18,14 +16,25 @@
           {{inputField.label}}
         </nb-checkbox>
       </ng-container>
+      <ng-container *ngSwitchCase="'number'">
+        <label class="label">{{inputField.label}}</label>
+        <input nbInput
+               fullWidth
+               [formControlName]="inputField.name"
+               [status]="inputField.control.valid ? 'basic':'danger'"
+               type="number">
+      </ng-container>
+      <ng-container *ngSwitchCase="'date'">
+        <label class="label">{{inputField.label}}</label>
+        <input fullWidth nbInput placeholder="Pick Date" [nbDatepicker]="dateTimePicker" [formControlName]="inputField.name">
+        <nb-datepicker #dateTimePicker></nb-datepicker>
+      </ng-container>
     </ng-container>
     <hr>
   </div>
   <ng-container>
-    <button nbButton (click)="submitBtnClicked($event)" [disabled]="!form.valid">Submit</button>
-  </ng-container>
-  <ng-container>
-    <button nbButton (click)="setViewOnlyMode()">View only mode</button>
-    <button nbButton (click)="setEditMode()">Edit mode</button>
+    <button nbButton (click)="submitBtnClicked($event)" [disabled]="!form.valid">
+      {{"Save"}}
+    </button>
   </ng-container>
 </ng-form>

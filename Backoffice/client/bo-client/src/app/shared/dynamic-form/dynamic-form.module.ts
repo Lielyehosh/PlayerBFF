@@ -5,7 +5,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {
   NbAccordionModule,
   NbButtonModule,
-  NbCardModule, NbCheckboxModule,
+  NbCardModule, NbCheckboxModule, NbDatepickerModule,
   NbIconModule,
   NbInputModule,
   NbListModule
@@ -32,6 +32,7 @@ import {PagesRoutingModule} from "../../pages/pages-routing.module";
     PagesRoutingModule,
     ReactiveFormsModule,
     NbCheckboxModule,
+    NbDatepickerModule,
   ],
   exports: [
     DynamicFormComponent

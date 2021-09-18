@@ -1,7 +1,7 @@
 import {Input} from '@angular/core';
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {DynamicInputField} from "./dynamic-input-field";
+import {DynamicInputField,InputFieldType} from "./dynamic-input-field";
 
 @Component({
   selector: 'app-dynamic-form',
@@ -30,7 +30,7 @@ export class DynamicFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      ...this.convertArrayToObject(this.inputFields, 'id', 'control')
+      ...this.convertArrayToObject(this.inputFields, 'name', 'control')
     });
     this.form.valueChanges.subscribe(console.log);
   }
@@ -43,12 +43,12 @@ export class DynamicFormComponent implements OnInit {
 
   setViewOnlyMode() {
     this.inputFields.forEach(field => {
-      this.form?.controls[field.id].disable();
+      this.form?.controls[field.name].disable();
     });
   }
   setEditMode() {
     this.inputFields.forEach(field => {
-      this.form?.controls[field.id].enable();
+      this.form?.controls[field.name].enable();
     });
   }
 }
