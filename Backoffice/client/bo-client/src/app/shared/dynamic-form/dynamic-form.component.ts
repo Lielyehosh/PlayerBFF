@@ -11,6 +11,7 @@ import {DynamicInputField} from "./dynamic-input-field";
 export class DynamicFormComponent implements OnInit {
 
   @Input() inputFields: Array<DynamicInputField> = [];
+  @Input() viewOnly: boolean = true;
   @Output('submit') submit: EventEmitter<any> = new EventEmitter<any>();
   form: FormGroup | null = null;
 
@@ -38,5 +39,16 @@ export class DynamicFormComponent implements OnInit {
     if (this.form?.valid) {
       this.submit.emit(this.form?.value);
     }
+  }
+
+  setViewOnlyMode() {
+    this.inputFields.forEach(field => {
+      this.form?.controls[field.id].disable();
+    });
+  }
+  setEditMode() {
+    this.inputFields.forEach(field => {
+      this.form?.controls[field.id].enable();
+    });
   }
 }

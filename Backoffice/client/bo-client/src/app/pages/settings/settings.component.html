@@ -1,5 +1,13 @@
 <nb-card>
+  <nb-card-header>
+    <h3>
+    {{"Settings"}}
+    <button nbButton [disabled]="!canEdit" (click)="onEditBtnClicked()">
+      {{editMode ? "Edit" : "View"}}
+    </button>
+    </h3>
+  </nb-card-header>
   <nb-card-body>
-    <app-dynamic-form [inputFields]="formScheme" (submit)="onSubmit($event)"></app-dynamic-form>
+    <app-dynamic-form #settingForm [inputFields]="formScheme" (submit)="onSubmit($event)"></app-dynamic-form>
   </nb-card-body>
 </nb-card>

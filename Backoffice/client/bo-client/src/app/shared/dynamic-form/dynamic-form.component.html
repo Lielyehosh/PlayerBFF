@@ -1,8 +1,4 @@
 <ng-form *ngIf="form" [formGroup]="form">
-  <span>Value: {{form.value | json}}</span>
-  <hr>
-  <span>Valid: {{form.valid | json}}</span>
-  <hr>
   <div *ngFor="let inputField of inputFields; let i=index">
     <ng-container [ngSwitch]="inputField.type">
       <ng-container *ngSwitchCase="'text'">
@@ -23,8 +19,13 @@
         </nb-checkbox>
       </ng-container>
     </ng-container>
+    <hr>
   </div>
   <ng-container>
     <button nbButton (click)="submitBtnClicked($event)" [disabled]="!form.valid">Submit</button>
+  </ng-container>
+  <ng-container>
+    <button nbButton (click)="setViewOnlyMode()">View only mode</button>
+    <button nbButton (click)="setEditMode()">Edit mode</button>
   </ng-container>
 </ng-form>
