@@ -2,6 +2,7 @@ import {ViewChild} from '@angular/core';
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import {InputFieldType} from "../../shared/dynamic-form/dynamic-input-field";
+import {SettingsService} from "../../core/services/api/settings.service";
 
 @Component({
   selector: 'app-settings',
@@ -11,40 +12,17 @@ import {InputFieldType} from "../../shared/dynamic-form/dynamic-input-field";
 export class SettingsComponent implements OnInit {
   formScheme: any = [
     {
-      type: InputFieldType.CHECKBOX,
-      control: this.fb.control({value: true, disabled: true}),
-      label: "Checkbox",
-      name: 'Field1'
-    },
-    {
       type: InputFieldType.TEXT,
-      control: this.fb.control({value: '', disabled: true}, Validators.required),
-      label: "Text",
-      name: 'Field2'
-    },
-    {
-      type: InputFieldType.NUMBER,
-      control: this.fb.control({value: '', disabled: true}, Validators.required),
-      label: "Number",
-      name: 'Field3'
-    },
-    {
-      type: InputFieldType.DATE,
-      control: this.fb.control({value: '', disabled: true}, Validators.required),
-      label: "Date",
-      name: 'Field4'
-    },
-    {
-      type: InputFieldType.DATE,
-      control: this.fb.control({value: '', disabled: true}, Validators.required),
-      label: "Date",
-      name: 'Field5'
+      control: this.fb.control({value: true, disabled: true}),
+      label: "Site Title",
+      name: 'title'
     }
   ];
   canEdit: boolean = true;
   editMode: boolean = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private settingsService: SettingsService) {
   };
 
 
@@ -53,6 +31,11 @@ export class SettingsComponent implements OnInit {
 
   onSubmit($event: any) {
     console.log($event);
+    this.settingsService.postEditSettings({
+      SiteTitle: $event.title
+    }).subscribe(res => {
+      console.log(res);
+    })
   }
 
   @ViewChild('settingForm') settingForm: any;
