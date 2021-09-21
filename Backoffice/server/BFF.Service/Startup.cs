@@ -75,6 +75,12 @@ namespace BFF.Service
             app.UseAuthentication();
             app.UseAuthorization();
 
+            var webSocketOptions = new WebSocketOptions()
+            {
+                KeepAliveInterval = TimeSpan.FromSeconds(Convert.ToDouble(Configuration["WebSocket:KeepAliveInterval"])),
+            };
+            app.UseWebSockets(webSocketOptions);
+            
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }

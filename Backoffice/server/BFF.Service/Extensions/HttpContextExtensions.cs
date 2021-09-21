@@ -9,5 +9,10 @@ namespace BFF.Service.Extensions
         {
             return context.User.FindFirstValue(Services.AuthService.IdClaim);
         }
+        
+        public static string GetUsername(this HttpContext context)
+        {
+            return context.User.FindFirstValue(Services.AuthService.UsernameClaim);
+        }
     }
 }

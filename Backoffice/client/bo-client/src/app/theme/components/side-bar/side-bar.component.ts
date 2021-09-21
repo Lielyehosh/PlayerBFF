@@ -30,6 +30,10 @@ export class SideBarComponent implements OnInit {
     {
       title: 'Settings',
       link: '/home/settings'
+    },
+    {
+      title: 'Game',
+      link: '/home/game'
     }
   ];
   constructor() { }

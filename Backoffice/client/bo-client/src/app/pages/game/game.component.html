@@ -1,0 +1,30 @@
+<nb-card>
+  <nb-card-header>
+    <!--    <button nbButton (click)="onConnectBtnClicked()">Connect</button>-->
+  </nb-card-header>
+  <nb-card-body>
+    <nb-layout>
+      <nb-layout-column>
+        <ng-container>
+          <input nbInput fullWidth [(ngModel)]="msgInput">
+          <button nbButton (click)="sendMessage()">Send Message</button>
+        </ng-container>
+        <hr>
+        <ng-container>
+          <span *ngFor="let msg of messages">{{msg}}<br></span>
+        </ng-container>
+      </nb-layout-column>
+      <nb-layout-column>
+        <ng-container>
+          <span>{{"Connected"}}</span>
+          <nb-list [role]="users">
+            <nb-list-item *ngFor="let user of users" class="text-success">{{user}}</nb-list-item>
+          </nb-list>
+        </ng-container>
+      </nb-layout-column>
+    </nb-layout>
+  </nb-card-body>
+  <nb-card-footer>
+    <button nbButton (click)="onUnsubscribeBtnClicked()">Unsubscribe</button>
+  </nb-card-footer>
+</nb-card>
