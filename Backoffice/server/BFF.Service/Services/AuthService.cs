@@ -21,7 +21,7 @@ namespace BFF.Service.Services
     {
         public const string IdClaim = "id";
         public const string EmailClaim = "email";
-        public const string UsernameClaim = "email";
+        public const string UsernameClaim = "username";
         
         private readonly ILogger<AuthService> _logger;
         private readonly IConfiguration _config;
