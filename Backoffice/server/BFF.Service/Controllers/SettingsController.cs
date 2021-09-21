@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;
 using System.Threading.Tasks;
+using BFF.Service.Extensions;
 using BFF.Service.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -31,10 +32,10 @@ namespace BFF.Service.Controllers
     
         [HttpPost]
         [Route("edit")]
-        public async Task<IActionResult> EditSettingsAsync([FromBody] EditSettingsRequest body, CancellationToken ct)
+        public Task<IActionResult> EditSettingsAsync([FromBody] EditSettingsRequest body, CancellationToken ct)
         {
-            _logger.LogDebug("Receive edit settings request - site={Title}", body.Title);
-            return Ok();
+            _logger.LogDebug("Receive edit settings request - site={Title} user-{User}", body.Title, HttpContext.GetUserId());
+            return Task.FromResult<IActionResult>(Ok());
         }
     }
 }

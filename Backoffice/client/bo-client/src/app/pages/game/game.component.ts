@@ -22,7 +22,11 @@ export class GameComponent implements OnInit, OnDestroy {
     this.username = this.authStore.getAuthPayload().username;
     console.log(this.username);
     // this.webSocketSubject = webSocket(`ws://localhost:4649/chat?name=${this.username}`);
-    this.webSocketSubject = webSocket(`wss://localhost:5001/ws/player/join`);
+    this.webSocketSubject = webSocket({
+      url: `wss://localhost:5001/ws/player/join`,
+      serializer: msg => JSON.stringify({roles: "admin,user", msg: msg}),
+    });
+    // `wss://localhost:5001/ws/player/join`);
   }
 
   ngOnInit(): void {

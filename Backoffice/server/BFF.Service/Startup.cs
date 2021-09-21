@@ -6,6 +6,7 @@ using Common.Models;
 using Common.Utils;
 using Common.Utils.Extensions;
 using Common.Utils.Settings;
+using GameService.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -53,6 +54,11 @@ namespace BFF.Service
             {
                 Address = Configuration["AuthMsGrpc:Address"],
                 IgnoreSsl = Convert.ToBoolean(Configuration["AuthMsGrpc:IgnoreSsl"])
+            });
+            services.AddGameMsClient(new GrpcClientSettings()
+            {
+                Address = Configuration["GameMsGrpc:Address"],
+                IgnoreSsl = Convert.ToBoolean(Configuration["GameMsGrpc:IgnoreSsl"])
             });
             
             services.AddControllers();

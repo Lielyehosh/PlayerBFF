@@ -1,34 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.WebSockets;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using AuthMS;
+using AuthService.Models;
 using BFF.Service.Extensions;
+using GameMs;
+using GameService.Models;
+using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
-namespace BFF.Service.Controllers
+namespace BFF.Service.WebSockets
 {
     [Route("ws/[controller]")]
     [Controller]
     public class PlayerController : ControllerBase
     {
         private readonly ILogger<PlayerController> _logger;
+        private readonly IGameMsClient _gameMsClient;
 
-        public PlayerController(ILogger<PlayerController> logger)
+        public PlayerController(ILogger<PlayerController> logger,
+            IGameMsClient gameMsClient)
         {
             _logger = logger;
+            _gameMsClient = gameMsClient;
         }
-
+        
         [HttpGet("join")]
         public async Task Join()
         {
@@ -38,7 +42,7 @@ namespace BFF.Service.Controllers
                 using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
                 try
                 {
-                    await Play(HttpContext, webSocket);
+                    await PlayTest(HttpContext, webSocket);
                 }
                 finally
                 {
@@ -53,26 +57,49 @@ namespace BFF.Service.Controllers
             }
         }
 
-        // private async Task Play(HttpContext httpContext, WebSocket webSocket, CancellationToken ct)
+        private async Task PlayTest(HttpContext httpContext, WebSocket webSocket)
+        {
+            while (webSocket.State == WebSocketState.Open)
+            {
+                var response = _gameMsClient.GrpcClient.JoinGame(new JoinGameRequest()
+                {
+                    Name = "Liel"
+                }).ResponseStream;
+                
+                while (await response.MoveNext())
+                {
+                    _logger.LogDebug("response from grpc server-{Res}", response.Current);
+                    await WriteToWebSocketBuffer(webSocket, response.Current);
+                }
+
+            }
+        }
+
+
+        // [HttpGet("join")]
+        // public async Task Join()
         // {
-        //     var buffer = new byte[1024 * 4];
-        //     var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), ct);
-        //     while (!result.CloseStatus.HasValue)
+        //     if (HttpContext.WebSockets.IsWebSocketRequest)
         //     {
-        //         // await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, result.Count), result.MessageType, result.EndOfMessage, ct);
-        //         await WriteToWebSocketBuffer(webSocket, new WSMessage()
+        //         _logger.LogDebug("Accept WebSocket request");
+        //         using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
+        //         try
         //         {
-        //             Message = "Hello"
-        //         }, ct);
-        //         result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), ct);
-        //         var msgObj = ReadFromWebSocketBuffer<WSMessage>(buffer, 0, result.Count);
-        //     _logger.LogDebug("state {state}",webSocket.State);
-        //         
+        //             await Play(HttpContext, webSocket);
+        //         }
+        //         finally
+        //         {
+        //             if (webSocket.CloseStatus != null)
+        //                 await webSocket.CloseAsync(webSocket.CloseStatus.Value, webSocket.CloseStatusDescription,
+        //                     CancellationToken.None);
+        //         }
         //     }
-        //     _logger.LogDebug("state {state}",webSocket.State);
-        //     await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, ct);
+        //     else
+        //     {
+        //         HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+        //     }
         // }
-        
+
         private async Task Play(HttpContext httpContext, WebSocket webSocket)
         {
             var buffer = new byte[1024 * 4];

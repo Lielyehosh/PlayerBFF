@@ -13,9 +13,15 @@ export class SettingsComponent implements OnInit {
   formScheme: any = [
     {
       type: InputFieldType.TEXT,
-      control: this.fb.control({value: true, disabled: true}),
+      control: this.fb.control({value: "Liel's Site", disabled: true}),
       label: "Site Title",
       name: 'title'
+    },
+    {
+      type: InputFieldType.CHECKBOX,
+      control: this.fb.control({value: true, disabled: true}),
+      label: "Secure",
+      name: 'secure'
     }
   ];
   canEdit: boolean = true;
@@ -23,6 +29,7 @@ export class SettingsComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private settingsService: SettingsService) {
+
   };
 
 

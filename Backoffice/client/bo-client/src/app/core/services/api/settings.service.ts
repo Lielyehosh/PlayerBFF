@@ -12,7 +12,7 @@ export class SettingsService {
   }
 
   postEditSettings(settings: Settings) {
-    return this.http.post<Settings>('/api/settings/edit',settings);
+    return this.http.post<Settings>('/api/settings/edit', settings);
   }
 
 }

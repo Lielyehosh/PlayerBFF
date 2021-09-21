@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "GameMs";
+
+package game;
+
+service Game {
+  rpc JoinGame (JoinGameRequest) returns (stream JoinGameResponse);
+}
+
+message JoinGameRequest {
+  string name = 1;
+}
+
+message JoinGameResponse {
+  string message = 1;
+}
