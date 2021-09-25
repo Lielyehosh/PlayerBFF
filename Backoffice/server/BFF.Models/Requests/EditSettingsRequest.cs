@@ -1,4 +1,5 @@
-﻿namespace BFF.Service.Models
+﻿
+namespace BFF.Models
 {
     public class EditSettingsRequest
     {

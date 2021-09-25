@@ -3,6 +3,7 @@ import {AuthStore} from "../../stores/auth.store";
 import {webSocket, WebSocketSubject} from "rxjs/webSocket";
 import {takeUntil} from "rxjs/operators";
 import {Subject} from "rxjs";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +14,11 @@ export class GameService {
   private destroy$: Subject<void> = new Subject<void>();
   messages: any = [];
 
-  constructor(protected authStore: AuthStore) {
+  constructor(protected authStore: AuthStore,
+              private http: HttpClient) {
     this.username = this.authStore.getAuthPayload().username;
     this.webSocketSubject = webSocket(`wss://localhost:5001/ws/player/join`);
-    this.connect();  
+    this.connect();
   }
 
   connect() {

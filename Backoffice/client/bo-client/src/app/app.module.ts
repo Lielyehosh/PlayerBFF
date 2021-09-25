@@ -19,6 +19,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {NbAuthJWTToken, NbAuthModule, NbPasswordAuthStrategy} from "@nebular/auth";
 import {AuthInterceptor} from "./core/interceptors/auth.interceptor";
 import {DynamicFormModule} from "./shared/dynamic-form/dynamic-form.module";
+import {Ng2SmartTableModule} from "ng2-smart-table";
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import {DynamicFormModule} from "./shared/dynamic-form/dynamic-form.module";
     HttpClientModule,
     NbMenuModule.forRoot(),
     DynamicFormModule,
+    Ng2SmartTableModule,
     NbDatepickerModule.forRoot(),
   ],
   providers: [

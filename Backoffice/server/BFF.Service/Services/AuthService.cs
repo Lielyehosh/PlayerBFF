@@ -7,13 +7,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using AuthMS;
 using AuthService.Models;
+using BFF.Models;
 using BFF.Service.Controllers;
 using BFF.Service.Interfaces;
-using BFF.Service.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using LoginRequest = BFF.Service.Models.LoginRequest;
 
 namespace BFF.Service.Services
 {

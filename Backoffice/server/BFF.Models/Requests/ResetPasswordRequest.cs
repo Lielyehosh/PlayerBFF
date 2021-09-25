@@ -1,4 +1,4 @@
-﻿namespace BFF.Service.Controllers
+﻿namespace BFF.Models
 {
     public class ResetPasswordRequest
     {

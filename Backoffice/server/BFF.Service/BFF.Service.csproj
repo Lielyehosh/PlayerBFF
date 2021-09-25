@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="10.1.1" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.18" />
       <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
     </ItemGroup>
@@ -16,6 +17,7 @@
       <ProjectReference Include="..\..\..\Game\GameService.Models\GameService.Models.csproj" />
       <ProjectReference Include="..\..\..\Common\Models\Common.Models.csproj" />
       <ProjectReference Include="..\..\..\Common\Utils\Common.Utils.csproj" />
+      <ProjectReference Include="..\BFF.Models\BFF.Models.csproj" />
     </ItemGroup>
 
 

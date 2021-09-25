@@ -4,6 +4,8 @@ import {Observable} from 'rxjs';
 import {webSocket, WebSocketSubject} from "rxjs/webSocket";
 import {AuthStore} from "../../core/stores/auth.store";
 import {takeUntil} from "rxjs/operators";
+import {HttpClient} from "@angular/common/http";
+import {Settings} from "../../core/services/models/settings";
 
 @Component({
   selector: 'app-game',
@@ -18,13 +20,12 @@ export class GameComponent implements OnInit, OnDestroy {
   username?: string;
   users: any = ["Aharon", "Sharon"];
 
-  constructor(protected authStore: AuthStore) {
+  constructor(protected authStore: AuthStore, protected http: HttpClient) {
     this.username = this.authStore.getAuthPayload().username;
     console.log(this.username);
     // this.webSocketSubject = webSocket(`ws://localhost:4649/chat?name=${this.username}`);
     this.webSocketSubject = webSocket({
       url: `wss://localhost:5001/ws/player/join`,
-      serializer: msg => JSON.stringify({roles: "admin,user", msg: msg}),
     });
     // `wss://localhost:5001/ws/player/join`);
   }
@@ -47,12 +48,22 @@ export class GameComponent implements OnInit, OnDestroy {
     this.webSocketSubject.next( {Message: this.msgInput})
   }
 
+  playMove() {
+    // this.webSocketSubject.next( {Player: this.authStore.getAuthPayload().username, Move: this.msgInput})
+    return this.http.post<any>('https://localhost:5001/ws/player/move', {
+      Move: this.msgInput
+    }).pipe(takeUntil(this.destroy$))
+      .subscribe(res => {
+        this.messages.push(res);
+      });
+  }
+
   onUnsubscribeBtnClicked() {
     this.webSocketSubject.unsubscribe();
   }
 
   private onMessageReceived(msg: any) {
-    this.messages.push(`${msg.Sender}: ${msg.Message}`);
+    this.messages.push(`Move ${msg.Result}`);
     console.log(msg.data);
   }
 

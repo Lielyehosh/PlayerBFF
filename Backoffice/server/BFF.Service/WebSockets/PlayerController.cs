@@ -38,17 +38,22 @@ namespace BFF.Service.WebSockets
         {
             if (HttpContext.WebSockets.IsWebSocketRequest)
             {
-                _logger.LogDebug("Accept WebSocket request");
+                _logger.LogDebug("Accept WebSocket request"); 
+                // TODO - get the user name
+                var userId =  "614378c582129ce1855d8e63";
                 using var webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
                 try
                 {
-                    await PlayTest(HttpContext, webSocket);
+                    await JoinPlay(HttpContext, webSocket);
                 }
                 finally
                 {
                     if (webSocket.CloseStatus != null)
+                    {
+                        _logger.LogInformation("User-{User} disconnected",userId);   
                         await webSocket.CloseAsync(webSocket.CloseStatus.Value, webSocket.CloseStatusDescription,
                             CancellationToken.None);
+                    }
                 }
             }
             else
@@ -57,24 +62,64 @@ namespace BFF.Service.WebSockets
             }
         }
 
-        private async Task PlayTest(HttpContext httpContext, WebSocket webSocket)
+        [HttpPost("move")]
+        public async Task<IActionResult> MakeMove([FromBody] MoveRequest moveRequest)
         {
-            while (webSocket.State == WebSocketState.Open)
+            var userId = HttpContext.GetUserId() ?? "614378c582129ce1855d8e63";
+            var result = await _gameMsClient.GrpcClient.PlayerMadeMoveAsync(new PlayerMadeMoveRequest()
             {
+                Move = moveRequest.Move,
+                UserId = userId
+            });
+            if (result.Success) return Ok();
+            return BadRequest();
+
+        }
+
+        private async Task JoinPlay(HttpContext httpContext, WebSocket webSocket)
+        {
+            // var username = httpContext.GetUserId();
+            // while (webSocket.State == WebSocketState.Open)
+            // {
                 var response = _gameMsClient.GrpcClient.JoinGame(new JoinGameRequest()
                 {
-                    Name = "Liel"
+                    UserId = "614378c582129ce1855d8e63"
                 }).ResponseStream;
                 
                 while (await response.MoveNext())
                 {
-                    _logger.LogDebug("response from grpc server-{Res}", response.Current);
+                    _logger.LogDebug("response from grpc server-{Res}", response.Current.Update);
                     await WriteToWebSocketBuffer(webSocket, response.Current);
                 }
-
-            }
+            // }
         }
 
+        
+
+        // private async Task ListenForGameMoves(AsyncDuplexStreamingCall<PlayMoveRequest, PlayMoveResponse> play, WebSocket webSocket)
+        // {
+        //     var buffer = new byte[1024 * 4];
+        //     while (webSocket.State == WebSocketState.Open)
+        //     {
+        //         var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+        //         if (result.CloseStatus.HasValue)
+        //             break;
+        //         var msgObj = ReadFromWebSocketBuffer<PlayMoveRequest>(buffer, 0, result.Count);
+        //         // handle the message
+        //         _logger.LogDebug("Receive message from client-{Message} move-{Move}", msgObj.Player, msgObj.Move);
+        //         await play.RequestStream.WriteAsync(msgObj);
+        //     }
+        // }
+        //
+        // private async Task ListenForGameUpdates(AsyncDuplexStreamingCall<PlayMoveRequest, PlayMoveResponse> play,
+        //     WebSocket webSocket)
+        // {
+        //     while (await play.ResponseStream.MoveNext())
+        //     {
+        //         _logger.LogDebug("response from grpc server-{Res}", play.ResponseStream.Current.Result);
+        //         await WriteToWebSocketBuffer(webSocket, play.ResponseStream.Current.Result);
+        //     }
+        // }
 
         // [HttpGet("join")]
         // public async Task Join()
@@ -100,31 +145,31 @@ namespace BFF.Service.WebSockets
         //     }
         // }
 
-        private async Task Play(HttpContext httpContext, WebSocket webSocket)
-        {
-            var buffer = new byte[1024 * 4];
-            var username = httpContext.GetUserId();
-            await WriteToWebSocketBuffer(webSocket, new WebSocketMessageBase()
-            {
-                Message = $"Hello {username}",
-                Sender = "System"
-            });
-            while (webSocket.State == WebSocketState.Open)
-            {
-                var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                if (result.CloseStatus.HasValue)
-                    break;
-                var msgObj = ReadFromWebSocketBuffer<WebSocketMessageBase>(buffer, 0, result.Count);
-                // handle the message
-                _logger.LogDebug("Receive message from client-{Message}", msgObj.Message);
-                await WriteToWebSocketBuffer(webSocket, new WebSocketMessageBase()
-                {
-                    Message = "Hello " + msgObj.Message,
-                    Sender = "System"
-                });
-            }
-            // await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
-        }
+        // private async Task Play(HttpContext httpContext, WebSocket webSocket)
+        // {
+        //     var buffer = new byte[1024 * 4];
+        //     var username = httpContext.GetUserId();
+        //     await WriteToWebSocketBuffer(webSocket, new WebSocketMessageBase()
+        //     {
+        //         Message = $"Hello {username}",
+        //         Sender = "System"
+        //     });
+        //     while (webSocket.State == WebSocketState.Open)
+        //     {
+        //         var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
+        //         if (result.CloseStatus.HasValue)
+        //             break;
+        //         var msgObj = ReadFromWebSocketBuffer<WebSocketMessageBase>(buffer, 0, result.Count);
+        //         // handle the message
+        //         _logger.LogDebug("Receive message from client-{Message}", msgObj.Message);
+        //         await WriteToWebSocketBuffer(webSocket, new WebSocketMessageBase()
+        //         {
+        //             Message = "Hello " + msgObj.Message,
+        //             Sender = "System"
+        //         });
+        //     }
+        //     // await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+        // }
         
         private static async Task WriteToWebSocketBuffer(WebSocket webSocket, object message)
         {
@@ -142,11 +187,10 @@ namespace BFF.Service.WebSockets
             return msgObj;
         }
 
-        public class WebSocketMessageBase
-        {
-            public string Sender { get; set; }
-            public string Message { get; set; }
-        }
-        
+    }
+
+    public class MoveRequest
+    {
+        public string Move { get; set; }
     }
 }

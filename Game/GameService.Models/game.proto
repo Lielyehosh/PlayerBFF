@@ -5,13 +5,23 @@ option csharp_namespace = "GameMs";
 package game;
 
 service Game {
-  rpc JoinGame (JoinGameRequest) returns (stream JoinGameResponse);
+  rpc JoinGame (JoinGameRequest) returns (stream GameUpdate);
+  rpc PlayerMadeMove (PlayerMadeMoveRequest) returns (PlayerMadeMoveResponse);
+}
+
+message PlayerMadeMoveRequest {
+  string userId = 1;
+  string move = 2;
+}
+
+message PlayerMadeMoveResponse {
+  bool success = 1;
+}
+
+message GameUpdate {
+  string update = 1;
 }
 
 message JoinGameRequest {
-  string name = 1;
-}
-
-message JoinGameResponse {
-  string message = 1;
+  string userId = 1;
 }

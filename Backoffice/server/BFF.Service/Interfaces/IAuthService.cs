@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using BFF.Models;
 using BFF.Service.Controllers;
-using BFF.Service.Models;
 
 namespace BFF.Service.Interfaces
 {

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using BFF.Models;
 using BFF.Service.Extensions;
 using BFF.Service.Interfaces;
-using BFF.Service.Models;
-using Common.Models.DbModels;
-using Common.Utils.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
