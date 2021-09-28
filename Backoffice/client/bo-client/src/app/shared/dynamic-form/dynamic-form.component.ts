@@ -1,8 +1,8 @@
 import {Input} from '@angular/core';
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {DynamicInputField} from "./dynamic-input-field";
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {TableForm} from "../../api/models/table-form";
+import {TableFormField} from "../../api/models/table-form-field";
 
 @Component({
   selector: 'app-dynamic-form',
@@ -16,17 +16,15 @@ export class DynamicFormComponent implements OnInit {
   }
 
 
-  inputFields: Array<DynamicInputField> = [];
   @Output('submit') submit: EventEmitter<any> = new EventEmitter<any>();
   @Output('cancel') cancel: EventEmitter<any> = new EventEmitter<any>();
 
-  @Input() viewOnly: boolean = true;
   private _formScheme?: TableForm;
   @Input() set formScheme(value: TableForm) {
     this._formScheme = value;
-    // @ts-ignore
-    this.inputFields = this.generateInputFields(this._formScheme)
   }
+  @Input() viewOnly: boolean = true;
+
   form: FormGroup | null = null;
 
   constructor(private fb: FormBuilder) {
@@ -34,9 +32,7 @@ export class DynamicFormComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.form = this.fb.group({
-      ...this.convertArrayToObject(this.inputFields, 'name', 'control')
-    });
+    this.form = this.fb.group(this.generateFormControls(this.formScheme.fields ?? []));
     this.form.valueChanges.subscribe(console.log);
   }
 
@@ -51,35 +47,21 @@ export class DynamicFormComponent implements OnInit {
   }
 
   setViewOnlyMode() {
-    this.inputFields.forEach(field => {
-      this.form?.controls[field.name].disable();
-    });
+    this.form?.disable();
   }
 
   setEditMode() {
-    this.inputFields.forEach(field => {
-      this.form?.controls[field.name].enable();
-    });
+    // TODO - disable the non-editable fields
+    this.form?.enable();
   }
 
-  private convertArrayToObject(array: any, key: any, value: any) {
+  private generateFormControls(array: Array<TableFormField>) {
     const initialValue = {};
-    return array.reduce((obj: any, item: any) => {
+    return array.reduce((obj: any, field: TableFormField) => {
       return {
         ...obj,
-        [item[key]]: item[value],
+        [field.id]: this.fb.control({disabled: field.readOnly, value: ''}, [field.required ? Validators.required : Validators.nullValidator]),
       };
     }, initialValue);
   };
-
-  public generateInputFields(_formScheme: TableForm) {
-    return _formScheme.fields?.map((field) => {
-      return {
-        label: field.label,
-        name: field.id,
-        type: field.type,
-        control: this.fb.control({disabled: field.readOnly, value: ''})
-      }
-    });
-  }
 }

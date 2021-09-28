@@ -1,3 +1,6 @@
 <nb-card-body>
-  <app-dynamic-form *ngIf="!isLoading && !!userFormScheme" [viewOnly]="true" [formScheme]="userFormScheme"></app-dynamic-form>
+  <app-dynamic-form *ngIf="!isLoading && !!userFormScheme"
+                    [viewOnly]="true"
+                    [formScheme]="userFormScheme"
+  (submit)="onSubmit($event)"></app-dynamic-form>
 </nb-card-body>

@@ -356,15 +356,18 @@
         "additionalProperties": false
       },
       "TableFormField": {
+        "required": [
+          "id",
+          "label",
+          "type"
+        ],
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "label": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "type": {
             "$ref": "#/components/schemas/TableFieldType"
@@ -389,11 +392,13 @@
         "additionalProperties": false
       },
       "UserView": {
+        "required": [
+          "id"
+        ],
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "createAt": {
             "type": "string",

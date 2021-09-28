@@ -29,4 +29,8 @@ export class UserComponent implements OnInit {
           err => catchError(err)
       );
   }
+
+  onSubmit($event: any) {
+    console.log($event);
+  }
 }
