@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {Component, OnInit} from '@angular/core';
 import {Observable} from "rxjs";
+import {UserService} from "../../api/services/user.service";
+import {UserView} from "../../api/models/user-view";
+import {TableForm} from "../../api/models/table-form";
+import {catchError} from "rxjs/operators";
 
 @Component({
   selector: 'app-user',
@@ -8,38 +11,22 @@ import {Observable} from "rxjs";
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit {
-  settings = {
-    columns: {
-      createAt: {
-        title: 'Create At'
-      },
-      modifyAt: {
-        title: 'Modify At'
-      },
-      username: {
-        title: 'Username'
-      },
-      idNumber: {
-        title: 'Id Number'
-      },
-      emailAddress: {
-        title: 'Email Address'
-      }
-    }
-  };
-  data = null;
-  dataObs?: Observable<Object>;
+  userFormScheme?: TableForm;
+  userListObs?: Observable<Array<UserView>>;
+  isLoading: boolean = true;
 
-  constructor(protected http: HttpClient) { }
+  constructor(protected userService: UserService) {
+  }
 
   ngOnInit(): void {
-    this.dataObs = this.http.get(`/api/user/list`);
-  }
-
-  onCreate($event: any) {
-
-  }
-  onCreateConfirm($event: any) {
-
+    this.userListObs = this.userService.apiUserListGet$Json();
+    this.userService.apiUserFormGet$Json()
+      .subscribe(
+        res => {
+          this.userFormScheme = res;
+          this.isLoading = false;
+          },
+          err => catchError(err)
+      );
   }
 }

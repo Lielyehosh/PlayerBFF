@@ -2,9 +2,5 @@
   "/api": {
     "target": "https://localhost:5001",
     "secure": false
-  },
-  "/ws": {
-    "target": "wss://localhost:5001",
-    "secure": true
   }
 }

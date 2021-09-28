@@ -42,11 +42,7 @@ namespace BFF.Service.Controllers
             });
             _mapper = config.CreateMapper();
         }
-
-        /// <summary>
-        ///     Use enum as string
-        /// </summary>
-        public bool EnumAsString { get; set; } = true;
+        
 
         [HttpGet("list")]
         public virtual async Task<List<TView>> GetListAsync(CancellationToken ct)
@@ -55,13 +51,22 @@ namespace BFF.Service.Controllers
             var models = await collection.Find(FilterDefinition<TModel>.Empty).ToListAsync(ct);
             return models.Select(DbModelToViewModel).ToList();
         }
+        
+        [HttpGet("form")]
+        public virtual async Task<TableForm> GetTableFormAsync(CancellationToken ct)
+        {
+            var form = ResolveFieldsFromType(typeof(TView), _fieldsById);
+            return form;
+        }
+        
+        public bool EnumAsString { get; set; } = true;
 
-        public virtual TView DbModelToViewModel(TModel model)
+        protected virtual TView DbModelToViewModel(TModel model)
         {
             return model == null ? null : _mapper.Map<TView>(model);
         }
 
-        public virtual TModel ViewModelToDbModel(TView view)
+        protected virtual TModel ViewModelToDbModel(TView view)
         {
             return view == null ? null : _mapper.Map<TModel>(view);
         }
@@ -77,13 +82,6 @@ namespace BFF.Service.Controllers
             if (type.BaseType == null)
                 return thisLevel;
             return GetTypePropertiesInDeclarationOrder(type.BaseType).Concat(thisLevel);
-        }
-        
-        [HttpGet("form")]
-        public virtual async Task<TableForm> GetTableFormAsync(CancellationToken ct)
-        {
-            var form = ResolveFieldsFromType(typeof(TView), _fieldsById);
-            return form;
         }
 
         /// <summary>

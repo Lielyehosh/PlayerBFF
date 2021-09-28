@@ -1,0 +1,13 @@
+<ng-container *ngIf="!!tableId">
+  <ng2-smart-table
+    [settings]="settingsObs | async"
+    [source]="dataObs | async"
+    (edit)="onEdit($event)"
+    (create)="onCreate($event)"
+    (delete)="onDelete($event)"
+    (deleteConfirm)="onDeleteConfirm($event)"
+    (createConfirm)="onCreateConfirm($event)"
+    (editConfirm)="onEditConfirm($event)"
+    (rowSelect)="onRowSelected($event)">
+  </ng2-smart-table>
+</ng-container>

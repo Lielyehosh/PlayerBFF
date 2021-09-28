@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Text.Json.Serialization;
 using AuthService.Models;
 using BFF.Service.Interfaces;
 using Common.Models;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 namespace BFF.Service
 {
@@ -61,7 +63,15 @@ namespace BFF.Service
                 IgnoreSsl = Convert.ToBoolean(Configuration["GameMsGrpc:IgnoreSsl"])
             });
             
-            services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+            });
+            
+            
+            services.AddControllers()
+                .AddJsonOptions(options => 
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,7 +96,11 @@ namespace BFF.Service
                 KeepAliveInterval = TimeSpan.FromSeconds(Convert.ToDouble(Configuration["WebSocket:KeepAliveInterval"])),
             };
             app.UseWebSockets(webSocketOptions);
-            
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("v1/swagger.json", "My API V1");
+            });
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }

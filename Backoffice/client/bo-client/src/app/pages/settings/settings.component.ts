@@ -1,8 +1,9 @@
 import {ViewChild} from '@angular/core';
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, Validators} from "@angular/forms";
-import {InputFieldType} from "../../shared/dynamic-form/dynamic-input-field";
+import {FormBuilder} from "@angular/forms";
+import { TableFieldType } from 'src/app/api/models';
 import {SettingsService} from "../../core/services/api/settings.service";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-settings',
@@ -12,13 +13,13 @@ import {SettingsService} from "../../core/services/api/settings.service";
 export class SettingsComponent implements OnInit {
   formScheme: any = [
     {
-      type: InputFieldType.TEXT,
+      type: TableFieldType.String,
       control: this.fb.control({value: "Liel's Site", disabled: true}),
       label: "Site Title",
       name: 'title'
     },
     {
-      type: InputFieldType.CHECKBOX,
+      type: TableFieldType.Boolean,
       control: this.fb.control({value: true, disabled: true}),
       label: "Secure",
       name: 'secure'

@@ -15,7 +15,7 @@ import {PagesRoutingModule} from "../../pages/pages-routing.module";
 
 @NgModule({
   declarations: [
-    DynamicFormComponent
+    DynamicFormComponent,
   ],
   imports: [
     CommonModule,

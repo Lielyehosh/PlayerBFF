@@ -1,7 +1,7 @@
 <ng-form *ngIf="form" [formGroup]="form">
-  <div *ngFor="let inputField of inputFields; let i=index">
+  <div *ngFor="let inputField of inputFields; let i = index">
     <ng-container [ngSwitch]="inputField.type">
-      <ng-container *ngSwitchCase="'text'">
+      <ng-container *ngSwitchCase="'String'">
           <label class="label">{{inputField.label}}</label>
           <input nbInput
                  fullWidth
@@ -9,14 +9,14 @@
                  [status]="inputField.control.valid ? 'basic':'danger'"
                  type="text">
       </ng-container>
-      <ng-container *ngSwitchCase="'checkbox'">
+      <ng-container *ngSwitchCase="'Boolean'">
         <nb-checkbox
           [status]="inputField.control.valid ? 'basic':'danger'"
           [formControlName]="inputField.name">
           {{inputField.label}}
         </nb-checkbox>
       </ng-container>
-      <ng-container *ngSwitchCase="'number'">
+      <ng-container *ngSwitchCase="'Number'">
         <label class="label">{{inputField.label}}</label>
         <input nbInput
                fullWidth
@@ -24,7 +24,7 @@
                [status]="inputField.control.valid ? 'basic':'danger'"
                type="number">
       </ng-container>
-      <ng-container *ngSwitchCase="'date'">
+      <ng-container *ngSwitchCase="'Date'">
         <label class="label">{{inputField.label}}</label>
         <input fullWidth nbInput placeholder="Pick Date" [nbDatepicker]="dateTimePicker" [formControlName]="inputField.name">
         <nb-datepicker #dateTimePicker></nb-datepicker>
@@ -35,6 +35,9 @@
   <ng-container>
     <button nbButton (click)="submitBtnClicked()" [disabled]="!form.valid">
       {{"Save"}}
+    </button>
+    <button nbButton (click)="cancelBtnClicked()">
+      {{"Cancel"}}
     </button>
   </ng-container>
 </ng-form>

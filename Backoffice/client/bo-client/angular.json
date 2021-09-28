@@ -87,6 +87,13 @@
             "browserTarget": "bo-client:build"
           }
         },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "typeCheck": true,
+            "exclude": []
+          }
+        },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {

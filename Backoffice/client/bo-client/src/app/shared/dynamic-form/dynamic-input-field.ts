@@ -1,14 +1,8 @@
 import {FormControl} from "@angular/forms";
-
-export enum InputFieldType {
-  TEXT = 'text',
-  CHECKBOX = 'checkbox',
-  NUMBER = 'number',
-  DATE = 'date',
-}
+import {TableFieldType} from "../../api/models/table-field-type";
 
 export interface DynamicInputField {
-  type: InputFieldType,
+  type: TableFieldType,
   label: string,
   control: FormControl,
   name: string

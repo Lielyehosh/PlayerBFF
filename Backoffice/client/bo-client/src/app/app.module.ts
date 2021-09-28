@@ -20,6 +20,9 @@ import {NbAuthJWTToken, NbAuthModule, NbPasswordAuthStrategy} from "@nebular/aut
 import {AuthInterceptor} from "./core/interceptors/auth.interceptor";
 import {DynamicFormModule} from "./shared/dynamic-form/dynamic-form.module";
 import {Ng2SmartTableModule} from "ng2-smart-table";
+import {DynamicTableModule} from "./shared/dynamic-table/dynamic-table.module";
+import {ApiModule} from "./api/api.module";
+import {environment} from "../environments/environment";
 
 @NgModule({
   declarations: [
@@ -72,8 +75,12 @@ import {Ng2SmartTableModule} from "ng2-smart-table";
     HttpClientModule,
     NbMenuModule.forRoot(),
     DynamicFormModule,
+    DynamicTableModule,
     Ng2SmartTableModule,
     NbDatepickerModule.forRoot(),
+    ApiModule.forRoot({
+      rootUrl: environment.baseUrl,
+    }),
   ],
   providers: [
     NbMenuService,
