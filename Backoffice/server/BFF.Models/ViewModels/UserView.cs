@@ -5,11 +5,11 @@ namespace BFF.Models.ViewModels
 {
     public class UserView : ViewModel
     {
-        [TableColumn(Name = "Id Number")]
+        // [TableFormField(Label = "Id Number")]
         public string IdNumber { get; set; }
-        [TableColumn(Name = "Username")]
+        // [TableFormField(Label = "Username")]
         public string Username { get; set; }
-        [TableColumn(Name = "Email Address")]
+        // [TableFormField(Label = "Email Address")]
         public string EmailAddress { get; set; }
     }
 }

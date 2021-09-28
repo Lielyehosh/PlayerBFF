@@ -8,9 +8,9 @@ namespace BFF.Models.ViewModels
     public class ViewModel : IViewModel
     {
         public string Id { get; set; }
-        [TableColumn(Name = "Creation Time")]
+        [TableFormField(Label = "Creation Time")]
         public DateTime CreateAt { get; set; }
-        [TableColumn(Name = "Last Update")]
+        [TableFormField(Label = "Last Update")]
         public DateTime ModifyAt { get; set; }
     }
 }

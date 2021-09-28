@@ -26,38 +26,5 @@ namespace BFF.Service.Controllers
         {
             _logger = logger;
         }
-
-        // public override UserView DbModelToViewModel(User user)
-        // {
-        //     if (user == null)
-        //         return null;
-        //     return new UserView
-        //     {
-        //         Id = user.Id,
-        //         CreateAt = user.CreateAt,
-        //         ModifyAt = user.ModifyAt,
-        //         Username = user.Username,
-        //         IdNumber = user.IdNumber,
-        //         EmailAddress = user.EmailAddress
-        //     };
-        // }
-
-        
-        
-        // [HttpGet("scheme")]
-        // public Task<List<ViewModelScheme>> GetSchemeAsync(CancellationToken ct)
-        // {
-        //     _logger.LogDebug("Receive edit settings request - User-{User}" ,HttpContext.GetUserId());
-        //     return Task.FromResult<IActionResult>(Ok());
-        // }
-        
-        // [HttpGet("list")]
-        // public async Task<List<UserView>> GetListAsync(CancellationToken ct)
-        // {
-        //     _logger.LogDebug("Receive edit settings request - Admin-{User}" ,HttpContext.GetUserId());
-        //     var userColl = _dal.GetCollection<User>();
-        //     var users = await userColl.Find(FilterDefinition<User>.Empty).ToListAsync(ct);
-        //     return users.Select(DbModelToViewModel).ToList();
-        // }
     }
 }
