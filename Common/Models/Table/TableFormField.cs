@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Common.Models.Table
@@ -12,10 +13,13 @@ namespace Common.Models.Table
         [JsonIgnore]
         public string DbModelId { get; set; }
 
+        [Required]
         public string Id { get; set; }
 
+        [Required]
         public string Label { get; set; }
-
+        
+        [Required]
         public TableFieldType Type { get; set; }
         
         public bool Required { get; set; }
